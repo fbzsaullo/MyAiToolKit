@@ -84,7 +84,7 @@ O `/sdd-setup` segue um **roteiro de análise comum** ([`base-prompt.md`](skills
 2. lê as **versões reais** em lockfiles e arquivos de versão;
 3. carrega o perfil da stack — ou o genérico, se não houver;
 4. formula **recomendações conforme as versões** (recursos disponíveis e não usados, padrões atrasados, suporte, ferramentas ausentes);
-5. pergunta, numa única rodada, o que a análise não respondeu (quais IAs, idioma, permissões);
+5. pergunta, numa única rodada, o que a análise não respondeu (quais IAs, idioma, permissões) e o **padrão das mensagens de commit**: Conventional Commits, ID da tarefa primeiro ou um padrão que você escreve;
 6. gera os arquivos, sempre mostrando o diff e sem sobrescrever o que foi escrito por pessoas.
 
 | Stack | Perfil |
@@ -191,7 +191,8 @@ Por que skills curtas com `references/`? A `SKILL.md` diz *como conduzir*; model
 - **A stack vem do projeto.** As skills não trazem tecnologia embutida; os perfis em `stacks/` e o `config.yml` dizem como cada projeto funciona.
 - **Lacuna declarada vale mais que lacuna preenchida.** Nenhuma skill inventa para fechar uma tabela; tudo o que é deduzido aparece como premissa.
 - **Nunca destrutivo.** Arquivos escritos por pessoas não são sobrescritos; o diff é sempre mostrado antes de gravar.
-- **A IA sugere, você decide.** Estimativas, commits, migrations e permissões sensíveis passam pela sua decisão.
+- **A IA sugere, você decide.** Estimativas, migrations e permissões sensíveis passam pela sua decisão.
+- **O kit nunca commita.** Ao fim de cada tarefa, você recebe a mensagem de commit pronta, em texto, no padrão escolhido no setup; o commit é seu.
 - **Português por padrão.** Skills e artefatos em PT-BR; o idioma dos artefatos pode mudar no `config.yml`.
 - **Fontes na mesa.** [REFERENCES.md](REFERENCES.md) credita a literatura e registra onde o toolkit diverge dela de propósito.
 

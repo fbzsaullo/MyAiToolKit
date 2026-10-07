@@ -91,11 +91,18 @@ sdd:
   docs_root: docs/sdd
   task_status_language: pt-BR        # vocabulário de status das tarefas
 
+git:
+  commit:                            # o kit nunca commita: as skills entregam a mensagem pronta neste formato
+    convention: conventional         # conventional | task-id | custom
+    format: "<tipo>(<escopo>): <descrição> (T-XX)"
+    types: [feat, fix, docs, chore, refactor, test, perf, build, ci, style]   # só em conventional
+    task_id: subject                 # subject | footer | none — onde a T-XX aparece
+    example: "feat(agenda): bloqueia horário já ocupado (T-03)"
+
 permissions:
   claude:
     file: .claude/settings.json
-    git_commit: ask                  # allow | ask
-    migrations: ask                  # ask | deny
+    migrations: ask                  # ask | deny (git commit fica sempre em ask)
   codex:
     config: .codex/config.toml
     rules: .codex/rules/myaitoolkit.rules
@@ -114,9 +121,22 @@ permissions:
 | `code_review.*` | sim | `code-review`, `sdd-review` |
 | `spike.*` | não (valores padrão abaixo) | `spike`, `sdd-plan` (estimativa) |
 | `sdd.docs_root` | não (padrão `docs/sdd`) | todas as skills do pipeline |
+| `git.commit.*` | sim (perguntado no setup) | `sdd-execute` (mensagem sugerida), `sdd-review` e `code-review` (aderência dos commits) |
 | `permissions.*` | não | `sdd-setup` |
 
-Padrões quando ausentes: `spike.hours_per_day: 6`, `spike.include_overheads: true`, `spike.overheads_pct: { code_review: 10, qa: 15, deploy: 5 }`, `sdd.docs_root: docs/sdd`, `project.language: pt-BR`.
+Padrões quando ausentes: `spike.hours_per_day: 6`, `spike.include_overheads: true`, `spike.overheads_pct: { code_review: 10, qa: 15, deploy: 5 }`, `sdd.docs_root: docs/sdd`, `project.language: pt-BR`. Sem `git.commit`, as skills usam `T-XX: <descrição>` e sugerem rodar o `/sdd-setup`.
+
+### `git.commit` — padrão das mensagens
+
+O kit **nunca commita**: estas chaves só definem o formato da mensagem que as skills entregam em texto.
+
+| `convention` | `format` | `task_id` | `example` |
+| --- | --- | --- | --- |
+| `conventional` | `<tipo>(<escopo>): <descrição> (T-XX)` | `subject` | `feat(agenda): bloqueia horário já ocupado (T-03)` |
+| `task-id` | `T-XX: <descrição>` | `subject` | `T-03: agenda consulta com bloqueio de horário` |
+| `custom` | o texto que o usuário escreveu, com os marcadores dele | `subject`, `footer` (`Refs: T-XX`) ou `none` | exemplo confirmado com o usuário |
+
+`types` só existe em `conventional`. Em `custom`, `example` é obrigatório: ele é a referência de quem lê o padrão.
 
 ## Monorepo
 

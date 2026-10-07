@@ -199,7 +199,7 @@ Cada perfil de stack acrescenta os segredos próprios (em Rails: `config/master.
   "Bash(git stash *)"
 ],
 "ask": [
-  "Bash(git commit *)",        // ou allow, conforme a escolha no setup
+  "Bash(git commit *)",        // sempre ask: o kit não commita
   "Bash(git push *)",
   "Bash(git merge *)",
   "Bash(git rebase *)",
@@ -221,7 +221,7 @@ Cada perfil de stack acrescenta os segredos próprios (em Rails: `config/master.
 
 `git fetch`, `git merge-base` e `git rev-parse` ficam liberados porque o `/code-review` precisa deles para descobrir a branch base e montar o diff; nenhum altera o trabalho local.
 
-**`git commit`:** escolha do time, feita no setup. É local e reversível, então `allow` é defensável para quem usa o agente para commitar com frequência.
+**`git commit`:** sempre em `ask`. As skills do MyAiToolKit nunca commitam: entregam a mensagem pronta, em texto, no padrão de `git.commit` do `config.yml`. O `ask` cobre o caso de o usuário pedir um commit ao agente fora das skills: o pedido é dele, e a confirmação continua. Quem quiser liberar para si usa o `.claude/settings.local.json`, que não é versionado.
 
 **Seis regras para bloquear force push**, por causa do espaço antes do `*`:
 
@@ -284,7 +284,7 @@ Cada perfil de stack acrescenta os segredos próprios (em Rails: `config/master.
 - [ ] Bloqueio universal + segredos da stack incluídos
 - [ ] Comandos liberados são os **reais** do projeto (do `config.yml`), com o gerenciador certo
 - [ ] Nenhuma regra do `allow` sombreada pelo `ask`/`deny`
-- [ ] Escolhas do usuário aplicadas (commit, migrations)
+- [ ] Escolhas do usuário aplicadas (migrations); `git commit` em `ask`
 - [ ] Mescla não removeu nenhuma regra existente; divergências listadas no relatório
 - [ ] `.claude/settings.local.json` no `.gitignore` (ou linha mostrada ao usuário)
 - [ ] `docs/` não aparece em nenhum bloqueio

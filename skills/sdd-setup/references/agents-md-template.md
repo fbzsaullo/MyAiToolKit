@@ -56,6 +56,7 @@ parênteses quando a convenção vier de uma decisão registrada.]
 - [ex.: Testes de cenário do PRD com o ID: `it "CA-XX: ..."` em `spec/requests` ou `spec/system`]
 - [ex.: Logs estruturados; nunca dado pessoal em log (`filter_parameters` cobre cpf, email, telefone)]
 - [ex.: Nesta versão do Rails, use `normalizes` e `generates_token_for` em vez de callbacks e tokens manuais]
+- [ex.: Commits em Conventional Commits — `feat(agenda): bloqueia horário já ocupado (T-03)`. O agente não commita: entrega a mensagem pronta (`docs/sdd/config.yml` → `git.commit`)]
 
 ## Restrições
 

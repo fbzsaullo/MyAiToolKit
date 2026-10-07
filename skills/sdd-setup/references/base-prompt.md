@@ -66,6 +66,19 @@ Para cada stack, leia o `profile.md` correspondente e colete:
 | Organização do código | estrutura de pastas | seção Convenções |
 | Convenções visíveis | padrões repetidos no código (ver lista no perfil) | seção Convenções |
 | Arquivos com segredo | lista do perfil + bloqueio universal | permissões |
+| Convenção de commit | ver abaixo | opção recomendada na pergunta de commit (passo 2 da skill) → `config.yml` → `git.commit` |
+
+### Convenção de commit
+
+Procure evidência do padrão que o time já usa, para recomendar a opção certa (a pergunta é feita mesmo assim):
+
+- `commitlint.config.*` ou `.commitlintrc*` (com `@commitlint/config-conventional` = Conventional Commits);
+- `commitizen` no `package.json` ou no `pyproject.toml`, ou um `.czrc`;
+- hook de mensagem: `.husky/commit-msg`, `lefthook.yml`, `.pre-commit-config.yaml` com `commit-msg`;
+- modelo de mensagem: `.gitmessage` ou `commit.template` no `.git/config`;
+- se o ambiente permitir ler o histórico, `git log --oneline -20`: a maioria das mensagens começa com `tipo(escopo):`? Com `T-XX:`? Com um ID de card?
+
+Sem evidência, nada é deduzido: a recomendação padrão é Conventional Commits.
 
 ### Comandos: a regra de ouro
 
@@ -136,6 +149,7 @@ Antes de gravar, confira:
 - [ ] Toda versão citada tem origem
 - [ ] Todo comando citado existe no repositório (ou está marcado como TODO)
 - [ ] Nenhum segredo copiado para os arquivos gerados
+- [ ] Padrão de commit escolhido pelo usuário, gravado em `git.commit` e citado em Convenções do `AGENTS.md`
 - [ ] `AGENTS.md` entre ~60 e ~120 linhas; detalhe longo foi para referência
 - [ ] Nada do `AGENTS.md` está duplicado no `CLAUDE.md`
 - [ ] Permissões: nenhuma regra do `allow` é anulada por uma do `ask`/`deny` (ver "Sombra entre listas" em `permission-principles.md`)

@@ -33,7 +33,7 @@ As severidades são ponto de partida. Subir ou descer é permitido, desde que o 
 
 | Pergunta | Se "não" |
 | --- | --- |
-| Os commits citam a `T-XX`? | Sugestão |
+| Os commits seguem o padrão de `git.commit` do `config.yml` e citam a `T-XX` quando o padrão prevê? | Sugestão |
 | A branch cita a `T-XX` (quando o projeto exige)? | Sugestão |
 | Os testes de cenário trazem `CA-XX` no nome, no formato do projeto (`docs/sdd/config.yml`)? | Importante |
 | Cada `CA-XX` de `Valida:` tem um teste? | Bloqueante |
@@ -227,5 +227,5 @@ Não são `R-XX`; vão para a seção própria do relatório:
 | Número mágico | | | ✓ |
 | Nome que poderia ser melhor | | | ✓ |
 | Comentário faltando em lógica complexa | | | ✓ |
-| Commit sem a T-XX | | | ✓ |
+| Commit fora do padrão ou sem a T-XX | | | ✓ |
 | Detalhe visual | | | — não é apontamento |

@@ -21,7 +21,7 @@ Tamanho alvo: **10 a 30 linhas**. Se crescer, provavelmente há conteúdo que de
 
 - Permissões do projeto em `.claude/settings.json` (política do time, versionada). Ajustes pessoais vão em `.claude/settings.local.json`, que não é versionado.
 - Skills do MyAiToolKit disponíveis pelo plugin: `/sdd-start`, `/sdd-next`, `/sdd-execute`, `/sdd-review`, `/sdd-trace`, `/sdd-setup`, `/spike` e `/my-ai-toolkit:code-review` (o nome com prefixo evita conflito com o `/code-review` nativo).
-- Commits: [conforme a escolha no setup — ex.: "o agente pode commitar; push sempre pede confirmação"].
+- Commits: as skills do MyAiToolKit não commitam; entregam a mensagem pronta no padrão do `AGENTS.md`. `git commit` e `git push` pedem confirmação.
 
 <!-- myaitoolkit:end -->
 

@@ -239,7 +239,7 @@ end
 
 ## 5. Execução — `sdd-execute`
 
-`/sdd-execute T-03` carrega `RN-02`, `RN-04`, `CA-02`, `CA-05` do PRD e o arquivo do `ADR-002` (confere que está `Aceito`), marca `Em andamento`, escreve os testes primeiro, implementa e roda `bin/rails zeitwerk:check` e `bundle exec rspec spec/services/agendar_consulta_spec.rb`. Tudo verde: marca `Concluído`, registra no histórico e sugere o commit `T-03: agenda consulta com bloqueio de horário`.
+`/sdd-execute T-03` carrega `RN-02`, `RN-04`, `CA-02`, `CA-05` do PRD e o arquivo do `ADR-002` (confere que está `Aceito`), marca `Em andamento`, escreve os testes primeiro, implementa e roda `bin/rails zeitwerk:check` e `bundle exec rspec spec/services/agendar_consulta_spec.rb`. Tudo verde: marca `Concluído`, registra no histórico e entrega, em texto, a mensagem de commit no padrão do `config.yml` (aqui, Conventional Commits): `feat(agenda): bloqueia horário já ocupado (T-03)`. O commit fica com o usuário.
 
 O teste de concorrência que fecha o `CA-05`:
 

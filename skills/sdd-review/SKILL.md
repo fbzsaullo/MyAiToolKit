@@ -71,7 +71,7 @@ Registre no início do relatório a stack, as versões e de onde vieram. Se nada
 Perguntas-guia e severidades padrão de cada eixo em `references/review-checklist.md`. Os eixos 1 a 6 valem sempre; o 7 só quando há SPEC-UI e a tarefa tem `Telas:`.
 
 1. **Aderência ao plano** — entregou exatamente o que a `T-XX` prometeu? Arquivos tocados batem com `Arquivos/camadas`? Os critérios de aceite estão atendidos? Tarefa marcada `Concluído` sem cumprir os critérios é Bloqueante.
-2. **Rastreabilidade** — commits citam a `T-XX`? Testes trazem o `CA-XX` no nome, no formato do projeto (`docs/sdd/config.yml` / perfil da stack)? Comentários citam `RN`/`ADR` onde a lógica não é óbvia?
+2. **Rastreabilidade** — commits seguem o padrão de `git.commit` (`docs/sdd/config.yml`) e citam a `T-XX` quando o padrão prevê? Testes trazem o `CA-XX` no nome, no formato do projeto (`docs/sdd/config.yml` / perfil da stack)? Comentários citam `RN`/`ADR` onde a lógica não é óbvia?
 3. **Aderência à especificação** — cada `RN` de `Implementa` está no código, do jeito que o PRD escreve? Cada `CA` de `Valida` tem teste que exercita o cenário? Cada ADR `Aceito` de `Decisões base` foi respeitado? Desvio silencioso, sem ADR novo, é Bloqueante.
 4. **Testes** — os testes prometidos existem, cobrem bordas e passam? Há teste da decisão de arquitetura quando ela é central (ex.: concorrência)?
 5. **Qualidade do código** — critérios universais (nomes coerentes, tratamento de erro do projeto, sem código morto, sem depuração esquecida, concorrência correta, sem dado pessoal em log) + convenções do projeto + `review-checklist.md` da stack.

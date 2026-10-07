@@ -4,6 +4,11 @@ Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Chang
 
 ## [Não lançado]
 
+### Setup
+- O `/sdd-setup` pergunta o **padrão das mensagens de commit**: Conventional Commits, ID da tarefa primeiro ou um padrão escrito pelo usuário. A escolha fica em `docs/sdd/config.yml` (`git.commit`) e numa linha do `AGENTS.md`; a opção que bate com o que o projeto já usa (commitlint, commitizen, hooks, histórico) vem recomendada.
+- **O kit nunca commita.** A pergunta "`git commit` pelo agente: liberado ou com confirmação?" saiu: `git commit` fica sempre em `ask`, e as skills entregam a mensagem pronta em texto. A chave `permissions.claude.git_commit` deixou de existir; o setup aponta configurações antigas com commit liberado.
+- `sdd-execute` monta a mensagem no padrão escolhido; `sdd-review` e `code-review` conferem se os commits seguem o padrão.
+
 ### Documentação
 - Crédito ao [leanwork-sdd](https://github.com/leanwork/leanwork-sdd) (Leanwork Group, MIT) como base do pipeline SDD: seção "Origem e créditos" no README, seção própria no REFERENCES.md e aviso de copyright no LICENSE.
 

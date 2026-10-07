@@ -6,7 +6,7 @@ O "script" que a skill monta para cada review. É montado **para o diff em quest
 
 Antes de apontar qualquer coisa:
 
-1. Leia a lista de commits e as mensagens: o que o autor quis fazer?
+1. Leia a lista de commits e as mensagens: o que o autor quis fazer? Com `git.commit` no `config.yml`, confira se as mensagens seguem o padrão; fora dele é Sugestão, quadrante Q4.
 2. Leia o diff por inteiro uma vez, sem anotar, para entender a forma da mudança.
 3. Agrupe os arquivos por papel (dados, regra, entrada, interface, testes, configuração, gerados).
 4. Identifique as stacks tocadas (um diff pode ter Ruby, ERB, JS e SQL) e carregue os checklists de cada uma.

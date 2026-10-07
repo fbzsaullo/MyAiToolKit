@@ -1,6 +1,6 @@
 ---
 name: sdd-setup
-description: Analisa o repositório (uma ou várias linguagens, inclusive monorepo), lê as versões reais de cada stack, carrega o perfil da stack (Rails é a referência; há perfis para Node, Python, .NET, Go, Java e PHP e um genérico para o resto), formula recomendações conforme as versões e gera a configuração do projeto para os agentes — docs/sdd/config.yml, AGENTS.md (contexto canônico), CLAUDE.md, permissões do Claude Code (.claude/settings.json) e do Codex (.codex/), e o relatório docs/sdd/stack-report.md. Modos — completo, audit (somente leitura), module <nome>, permissions, refresh. Nunca sobrescreve conteúdo escrito por pessoas e sempre mostra o diff antes de gravar. Use apenas quando o usuário chamar /sdd-setup (ou $sdd-setup) ou pedir explicitamente para configurar o toolkit, gerar AGENTS.md/CLAUDE.md, analisar a stack ou configurar permissões.
+description: Analisa o repositório (uma ou várias linguagens, inclusive monorepo), lê as versões reais de cada stack, carrega o perfil da stack (Rails é a referência; há perfis para Node, Python, .NET, Go, Java e PHP e um genérico para o resto), formula recomendações conforme as versões e gera a configuração do projeto para os agentes — docs/sdd/config.yml, AGENTS.md (contexto canônico), CLAUDE.md, permissões do Claude Code (.claude/settings.json) e do Codex (.codex/), e o relatório docs/sdd/stack-report.md. Pergunta também o padrão das mensagens de commit (o kit nunca commita, só entrega a mensagem pronta em texto). Modos — completo, audit (somente leitura), module <nome>, permissions, refresh. Nunca sobrescreve conteúdo escrito por pessoas e sempre mostra o diff antes de gravar. Use apenas quando o usuário chamar /sdd-setup (ou $sdd-setup) ou pedir explicitamente para configurar o toolkit, gerar AGENTS.md/CLAUDE.md, analisar a stack ou configurar permissões.
 argument-hint: "[audit | module <nome> | permissions | refresh — vazio = setup completo]"
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep
@@ -22,6 +22,7 @@ O roteiro de análise está em `references/base-prompt.md`. **Leia-o antes de co
 - **Raiz e módulo não se repetem.** Módulo nunca copia stack nem comandos globais.
 - **Enxuto.** O `AGENTS.md` é lido em toda sessão: cada linha custa contexto. Detalhe longo fica num documento referenciado.
 - **Multi-IA.** `AGENTS.md` é a fonte única (Codex, Cursor e outros o leem direto); o `CLAUDE.md` importa o `AGENTS.md` e acrescenta só o que é do Claude Code. Adicionar outra IA = seguir `${CLAUDE_PLUGIN_ROOT}/adapters/README.md`.
+- **O kit nunca commita.** Nenhuma skill do MyAiToolKit roda `git commit`. Ao fim de um trabalho, a skill entrega a mensagem de commit pronta, em texto, no padrão que o usuário escolheu aqui. Quem commita, e quando, é o usuário.
 
 ## Modos
 
@@ -48,17 +49,32 @@ Sem argumento e com setup já existente, pergunte se a intenção é `refresh` o
 
 ### 2. Perguntar — uma única rodada
 
-Junte numa só pergunta o que a análise não resolveu:
+Junte numa só rodada o que a análise não resolveu. Se o ambiente tem uma ferramenta de pergunta com opções (no Claude Code, `AskUserQuestion`), use-a: cada pergunta com suas opções e a resposta livre ("Outro"). Sem ela, numere as opções no texto e aceite resposta livre.
 
 > Antes de gravar, preciso de algumas escolhas:
 >
 > 1. **IAs usadas no projeto:** Claude Code, Codex, ambas, outra? *(define quais arquivos gero)*
 > 2. **Idioma dos artefatos:** pt-BR (padrão) ou en?
-> 3. **`git commit` pelo agente:** liberado (é local e reversível) ou com confirmação?
+> 3. **Padrão das mensagens de commit:** Conventional Commits, ID da tarefa primeiro, ou outro que você escreve? *(detalhes abaixo)*
 > 4. **Migrations:** com confirmação a cada uma, ou bloqueadas (só manualmente)?
 > 5. **Branch base para code review:** detectei `<main|master|develop>` — confirma?
 
-Inclua só as perguntas que a análise não respondeu sozinha. Em monorepo, acrescente: um `docs/sdd/` por sistema ou um único na raiz?
+Inclua só as perguntas que a análise não respondeu sozinha. A exceção é a 3: ela é feita sempre que o `config.yml` ainda não tem `git.commit`, mesmo que a análise tenha achado um padrão (nesse caso, a opção correspondente vem marcada como recomendada). Em monorepo, acrescente: um `docs/sdd/` por sistema ou um único na raiz?
+
+#### Padrão das mensagens de commit
+
+O kit não commita (ver Compromissos), então a pergunta é só sobre **o formato da mensagem** que as skills vão entregar em texto. Ofereça sempre duas opções e a resposta livre:
+
+| Opção | Formato | Exemplo |
+| --- | --- | --- |
+| **Conventional Commits** | `<tipo>(<escopo>): <descrição> (T-XX)`, com os tipos `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `perf`, `build`, `ci` e `style` | `feat(agenda): bloqueia horário já ocupado (T-03)` |
+| **ID da tarefa primeiro** | `T-XX: <descrição>` | `T-03: agenda consulta com bloqueio de horário` |
+| **Outro** | o usuário escreve o padrão — ex.: `bug(agenda): …`, `[PROJ-123] …`, gitmoji | — |
+
+- **Recomendação:** marque como recomendada a opção que bate com o que o projeto já usa (evidências em "Convenção de commit", na Etapa 3 do `base-prompt.md`). Sem evidência, recomende Conventional Commits.
+- **"Outro":** monte um exemplo no padrão escrito e confirme antes de gravar ("Ficaria assim: `bug(agenda): bloqueia horário já ocupado (T-03)` — certo?"). Se o padrão não tem lugar para a `T-XX`, pergunte onde ela entra: no fim do assunto, no rodapé (`Refs: T-XX`) ou em lugar nenhum.
+- **Idioma:** a descrição segue `project.language`; tipos, escopos e IDs não se traduzem.
+- **Onde fica:** `docs/sdd/config.yml` → `git.commit` (lido por `sdd-execute`, `sdd-review` e `code-review`) e uma linha em Convenções do `AGENTS.md`, para que qualquer IA siga o mesmo padrão.
 
 ### 3. Detectar divergências (quando já existe configuração)
 
@@ -73,6 +89,8 @@ Compare o que está documentado com o que a análise encontrou e mostre **antes*
 | Stack nova sem cobertura | entrou um frontend em `web/` sem perfil nem permissões | Média |
 | Link morto | índice aponta para PRD que não existe | Média |
 | Padrão novo não documentado | três reviews citam o mesmo padrão | Média |
+| Padrão de commit ausente ou contrariado | `config.yml` sem `git.commit`, ou os commits recentes seguem outro formato | Média — pergunte (passo 2) |
+| Commit liberado ao agente | configuração antiga com `permissions.claude.git_commit: allow` ou `Bash(git commit *)` em `allow` | Média — o kit não commita mais; proponha `ask` e deixe a decisão com o time |
 | Módulo novo sem contexto | engine criada depois do último setup | Baixa |
 | Permissão para comando que sumiu | `allow` com script removido | Baixa |
 
@@ -113,6 +131,7 @@ Mantenha a ordem canônica de seções (Resumo, Stack, Comandos, Convenções, R
 - arquivos criados, atualizados e intocados;
 - stacks e versões encontradas, com a origem de cada versão;
 - recomendações principais do `stack-report.md` (até 5);
+- padrão de commit escolhido, com um exemplo de mensagem;
 - divergências encontradas e o que foi feito com cada uma;
 - lacunas deixadas como `TODO` e o motivo;
 - módulos detectados que não receberam contexto (e por quê);
