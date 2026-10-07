@@ -37,8 +37,50 @@ O kit reúne três frentes:
 | --- | --- |
 | `/spike` | Recebe um card (texto, XML do Jira, issue do GitHub…), quebra em partes, **sugere** horas com premissas e grava **as horas que você decidir** |
 | `/code-review` | Pergunta a branch base e a história (XML do card, texto ou nenhuma), revisa com os checklists da stack e classifica cada apontamento por **severidade** e por **urgência × importância** |
+| `/commit-message` | Escreve a mensagem de commit das alterações atuais no padrão do projeto e entrega em texto — **nunca commita** |
 
-> No Claude Code existe um `/code-review` nativo. Se os dois aparecerem, use `/my-ai-toolkit:code-review`. No Codex, as skills são chamadas com `$`: `$sdd-start`, `$spike`, `$code-review`…
+> No Claude Code existe um `/code-review` nativo. Se os dois aparecerem, use `/my-ai-toolkit:code-review`. No Codex, as skills são chamadas com `# MyAiToolKit
+
+**Kit de ferramentas open-source para desenvolver software com agentes de IA** — Claude Code em primeiro lugar, com suporte a Codex e estrutura pronta para outras IAs.
+
+> 🎓 **Projeto de faculdade.** O MyAiToolKit é um projeto acadêmico e open-source. Contribuições, críticas e sugestões são bem-vindas — veja [CONTRIBUTING.md](CONTRIBUTING.md).
+>
+> O pipeline SDD tem como base o [leanwork-sdd](https://github.com/leanwork/leanwork-sdd) (MIT) — veja [Origem e créditos](#origem-e-créditos).
+
+O kit reúne três frentes:
+
+1. **Pipeline SDD (Spec-Driven Development)** — da arquitetura ao review, com cada artefato ligado ao anterior por IDs rastreáveis.
+2. **Setup multilinguagem** — analisa o repositório, lê as versões reais de cada stack e gera a configuração dos agentes (`AGENTS.md`, `CLAUDE.md`, permissões). Rails é a stack de referência.
+3. **Ferramentas do dia a dia** — `/spike` para analisar o esforço de um card e `/code-review` para revisar código próprio ou de colegas.
+
+---
+
+## Comandos
+
+### Pipeline SDD
+
+| Comando | O que faz |
+| --- | --- |
+| `/sdd-start` | Começa uma demanda e descobre por qual fase entrar |
+| `/sdd-architect` | Proposta de arquitetura com um arquivo de ADR por decisão e diagramas C4 |
+| `/sdd-prd` | PRD com regras de negócio (`RN-XX`) e critérios de aceite em Gherkin (`CA-XX`) |
+| `/sdd-prototype` | *(opcional)* SPEC-UI: telas (`UI-XX`) e estados, cruzados com o PRD |
+| `/sdd-plan` | Plano com tarefas (`T-XX`) de 30min a 4h, critérios testáveis e estimativa opcional definida por você |
+| `/sdd-execute` | Executa **uma** tarefa, com o contexto que ela declara, e atualiza o plano |
+| `/sdd-review` | Revisa a tarefa contra plano, PRD, ADRs e SPEC-UI; apontamentos `R-XX` |
+| `/sdd-trace` | Matriz de rastreabilidade `ADR ↔ RN ↔ CA ↔ UI ↔ T ↔ R ↔ teste` e os elos quebrados |
+| `/sdd-next` | Mostra onde o projeto está e sugere o próximo passo |
+| `/sdd-setup` | Analisa a stack e as versões e gera a configuração dos agentes |
+
+### Ferramentas
+
+| Comando | O que faz |
+| --- | --- |
+| `/spike` | Recebe um card (texto, XML do Jira, issue do GitHub…), quebra em partes, **sugere** horas com premissas e grava **as horas que você decidir** |
+| `/code-review` | Pergunta a branch base e a história (XML do card, texto ou nenhuma), revisa com os checklists da stack e classifica cada apontamento por **severidade** e por **urgência × importância** |
+| `/commit-message` | Escreve a mensagem de commit das alterações atuais no padrão do projeto e entrega em texto — **nunca commita** |
+
+> No Claude Code existe um `/code-review` nativo. Se os dois aparecerem, use `/my-ai-toolkit:code-review`. : `$sdd-start`, `$spike`, `$code-review`, `$commit-message`…
 
 ---
 
@@ -192,7 +234,7 @@ Por que skills curtas com `references/`? A `SKILL.md` diz *como conduzir*; model
 - **Lacuna declarada vale mais que lacuna preenchida.** Nenhuma skill inventa para fechar uma tabela; tudo o que é deduzido aparece como premissa.
 - **Nunca destrutivo.** Arquivos escritos por pessoas não são sobrescritos; o diff é sempre mostrado antes de gravar.
 - **A IA sugere, você decide.** Estimativas, migrations e permissões sensíveis passam pela sua decisão.
-- **O kit nunca commita.** Ao fim de cada tarefa, você recebe a mensagem de commit pronta, em texto, no padrão escolhido no setup; o commit é seu.
+- **O kit nunca commita.** Quando o review aprova uma tarefa, você recebe a mensagem de commit pronta, em texto, no padrão escolhido no setup; para qualquer outra mudança, há o `/commit-message`. O commit é seu, e o hash entra no plano no review seguinte.
 - **Português por padrão.** Skills e artefatos em PT-BR; o idioma dos artefatos pode mudar no `config.yml`.
 - **Fontes na mesa.** [REFERENCES.md](REFERENCES.md) credita a literatura e registra onde o toolkit diverge dela de propósito.
 

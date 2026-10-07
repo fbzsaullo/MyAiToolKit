@@ -75,7 +75,7 @@ São convites de uma linha: não repita se o usuário ignorar e nunca gere os ar
 
 - PRD cita ADR que não existe em `adrs/`
 - Plano cita CA que não está no PRD
-- Tarefa `Concluído` sem commit no histórico
+- Tarefa `Concluído` sem commit no histórico — confira com `git log --oneline --grep "T-XX"`: achou, mostre o hash e diga que o próximo `/sdd-review` preenche; não achou, a tarefa ainda não foi commitada (`/commit-message T-XX` dá a mensagem)
 - **Tarefa `Concluído` com review `Bloqueado` em aberto** — contradição grave
 - **Status da tarefa diferente do histórico do plano**
 - **Status com grafia fora do vocabulário** — a tarefa fica invisível; mostre a grafia encontrada

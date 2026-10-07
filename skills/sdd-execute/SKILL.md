@@ -65,13 +65,7 @@ Critérios atendidos e testes verdes:
 2. mude o `**Status:**` para `Concluído`;
 3. acrescente uma linha no histórico do plano com a data (e o commit, se já existir).
 
-**Nunca faça commit** — nem com a permissão liberada. Entregue a mensagem pronta, em texto, num bloco de código, no padrão de `git.commit` do `docs/sdd/config.yml`:
-
-- `conventional`: escolha o tipo pelo que a tarefa entrega (`feat` funcionalidade, `fix` correção, `docs`, `test`, `refactor`, `chore`…) e o escopo pelo módulo tocado — ex.: `feat(agenda): bloqueia horário já ocupado (T-03)`;
-- `task-id`: `T-03: agenda consulta com bloqueio de horário`;
-- `custom`: siga `format` e `example`, com a `T-XX` onde `task_id` mandar (`subject`, rodapé `Refs: T-XX` ou nenhum lugar).
-
-Sem `git.commit` no `config.yml`, use `T-XX: <descrição>` e sugira o `/sdd-setup`. A descrição segue `project.language`. O usuário decide se e quando commitar; o hash entra no histórico depois.
+**Nunca faça commit** — nem com a permissão liberada. A mensagem de commit **não sai aqui**: ela vem no fim do `/sdd-review`, quando a tarefa é aprovada, para ninguém commitar algo que o review devolve como `Bloqueado`. Se o usuário quiser a mensagem antes, aponte o `/commit-message T-XX`. O hash entra no histórico depois do commit (o `/sdd-review` preenche).
 
 Não deu para concluir? Use `Bloqueado`, escreva o motivo na coluna de observação do histórico e pare. Tarefa parcial marcada como `Concluído` é exatamente a inconsistência que o `sdd-trace` procura — não crie uma.
 
@@ -79,7 +73,7 @@ Se o plano tem o campo `**Estimativa:**`, **não altere** o valor — ele perten
 
 ## Passo 8 — Próximo passo
 
-Sugira `/sdd-review T-XX`. **Não rode o review automaticamente** — quem implementou não é quem decide se passou.
+Sugira `/sdd-review T-XX`. **Não rode o review automaticamente** — quem implementou não é quem decide se passou. Diga que a mensagem de commit sai no fim do review.
 
 ## Não fazer
 

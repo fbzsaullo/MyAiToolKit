@@ -74,7 +74,7 @@ O kit não commita (ver Compromissos), então a pergunta é só sobre **o format
 - **Recomendação:** marque como recomendada a opção que bate com o que o projeto já usa (evidências em "Convenção de commit", na Etapa 3 do `base-prompt.md`). Sem evidência, recomende Conventional Commits.
 - **"Outro":** monte um exemplo no padrão escrito e confirme antes de gravar ("Ficaria assim: `bug(agenda): bloqueia horário já ocupado (T-03)` — certo?"). Se o padrão não tem lugar para a `T-XX`, pergunte onde ela entra: no fim do assunto, no rodapé (`Refs: T-XX`) ou em lugar nenhum.
 - **Idioma:** a descrição segue `project.language`; tipos, escopos e IDs não se traduzem.
-- **Onde fica:** `docs/sdd/config.yml` → `git.commit` (lido por `sdd-execute`, `sdd-review` e `code-review`) e uma linha em Convenções do `AGENTS.md`, para que qualquer IA siga o mesmo padrão.
+- **Onde fica:** `docs/sdd/config.yml` → `git.commit` (lido por `commit-message`, `sdd-review` e `code-review`; regras de formato em `${CLAUDE_PLUGIN_ROOT}/templates/commit-message.md`) e uma linha em Convenções do `AGENTS.md`, para que qualquer IA siga o mesmo padrão.
 
 ### 3. Detectar divergências (quando já existe configuração)
 

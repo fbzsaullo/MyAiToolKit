@@ -1,6 +1,6 @@
 ---
 name: sdd-review
-description: Revisa a implementação de uma tarefa T-XX do plano SDD comparando o código com o plano, o PRD, os ADRs e a SPEC-UI, e gera o relatório REVIEW-T-XX com apontamentos R-XX classificados em Bloqueante, Importante ou Sugestão. Avalia aderência ao plano, rastreabilidade, aderência à especificação, testes, qualidade do código, segurança (com checklist por stack) e, quando há SPEC-UI, conformidade de interface. Um apontamento Bloqueante devolve a tarefa como Bloqueado no plano. Use quando o usuário pedir "review da T-XX", "revisar a tarefa", "validar a implementação contra o plano", "fechar a T-XX" ou trouxer um diff dizendo qual tarefa ele entrega. Fase 6 do pipeline SDD do MyAiToolKit. Para review avulso, sem plano SDD (código próprio ou de colegas, ligado ou não a um card), use a skill code-review.
+description: Revisa a implementação de uma tarefa T-XX do plano SDD comparando o código com o plano, o PRD, os ADRs e a SPEC-UI, e gera o relatório REVIEW-T-XX com apontamentos R-XX classificados em Bloqueante, Importante ou Sugestão. Avalia aderência ao plano, rastreabilidade, aderência à especificação, testes, qualidade do código, segurança (com checklist por stack) e, quando há SPEC-UI, conformidade de interface. Um apontamento Bloqueante devolve a tarefa como Bloqueado no plano. Use quando o usuário pedir "review da T-XX", "revisar a tarefa", "validar a implementação contra o plano", "fechar a T-XX" ou trouxer um diff dizendo qual tarefa ele entrega. Fase 6 do pipeline SDD do MyAiToolKit. Quando aprova, entrega a mensagem de commit pronta no padrão do projeto (o kit nunca commita) e preenche no histórico do plano o hash dos commits já feitos. Para review avulso, sem plano SDD (código próprio ou de colegas, ligado ou não a um card), use a skill code-review.
 argument-hint: "[T-XX e/ou branch, PR ou caminho do diff — opcional]"
 allowed-tools: Read, Glob, Grep, Edit(docs/sdd/reviews/**), Edit(docs/sdd/plans/**)
 ---
@@ -100,7 +100,28 @@ O plano só "sabe" do review se ele for escrito lá. Com **pelo menos um Bloquea
 
 Peça confirmação antes de editar o plano, e avise se a tarefa estava `Concluído` — é exatamente a contradição entre estado declarado e estado verificado que o `sdd-trace` trata como grave.
 
-Sem Bloqueante, **não mexa no plano**. `Aprovado com ressalvas` não muda o estado da tarefa; Importantes que justificarem viram tarefa nova via `sdd-plan`.
+Sem Bloqueante, **não mexa no estado da tarefa**. `Aprovado com ressalvas` não muda o status; Importantes que justificarem viram tarefa nova via `sdd-plan`. A única edição permitida no plano, nesse caso, é a coluna Commit do histórico (Passo 7).
+
+## Passo 7 — Mensagem de commit e hash
+
+O kit nunca commita (`${CLAUDE_PLUGIN_ROOT}/templates/commit-message.md`). Este passo fecha o ciclo da tarefa em texto.
+
+**Aprovado ou Aprovado com ressalvas** — entregue a mensagem de commit da `T-XX`, montada como o template manda, no padrão de `git.commit` do `docs/sdd/config.yml`:
+- tipo e escopo pelo efeito da tarefa;
+- a `T-XX` onde `task_id` mandar;
+- no corpo, quando ajuda, as `RN`/`ADR` que a tarefa atende.
+
+Se o diff revisado trouxe coisas fora da tarefa, sugira separar em outro commit. Termine com uma linha: "Depois de commitar, o hash entra no histórico no próximo `/sdd-review` (de qualquer tarefa) — ou me diga o hash agora." Não abra um novo round só para isso.
+
+**Bloqueado** — sem mensagem. Ela sai no round que aprovar.
+
+**Hash no histórico** — sempre que este passo rodar, procure as linhas do histórico com `Concluído` e a coluna Commit vazia (`—` ou em branco), inclusive de tarefas anteriores:
+1. para cada uma, `git log --oneline --grep "T-XX"` (só leitura);
+2. **um** commit encontrado: proponha preencher com o hash curto;
+3. vários: liste e pergunte qual (o da entrega, normalmente o mais antigo);
+4. nenhum: deixe vazio — o commit ainda não foi feito, ou a mensagem não cita a tarefa (diga isso).
+
+Mostre as mudanças propostas na coluna e peça confirmação antes de editar o plano. Nunca invente um hash.
 
 ## Segundo round em diante
 
@@ -108,6 +129,7 @@ Sem Bloqueante, **não mexa no plano**. `Aprovado com ressalvas` não muda o est
 2. Leia o mais recente e preencha "Round anterior" item a item: cada `R-XX` antigo como resolvido, persistente ou não verificável.
 3. Salve como `REVIEW-T-XX-AAAA-MM-DD-roundN.md`. O relatório anterior não é editado — a sequência deles é o histórico de qualidade da tarefa.
 4. Os apontamentos novos recomeçam em `R-01`. Fora do relatório, sempre qualificados: `R-01 (REVIEW-T-04-2026-10-09)`.
+5. O Passo 7 vale em todo round: a mensagem de commit sai no round que aprovar.
 
 ## Não é papel deste review
 
@@ -130,6 +152,7 @@ Sem Bloqueante, **não mexa no plano**. `Aprovado com ressalvas` não muda o est
 
 - `references/review-template.md` — modelo do relatório
 - `references/review-checklist.md` — perguntas e severidades por eixo
+- `${CLAUDE_PLUGIN_ROOT}/templates/commit-message.md` — formato da mensagem de commit (Passo 7)
 - `${CLAUDE_PLUGIN_ROOT}/templates/stack-detection.md` — como descobrir a stack
 - `${CLAUDE_PLUGIN_ROOT}/stacks/rails/review-checklist.md` e `security-checklist.md` — checklists da stack de referência
 - `${CLAUDE_PLUGIN_ROOT}/stacks/rails/pipeline-example.md` — exemplo completo; mostra um `R-XX` devolvendo a tarefa para `Bloqueado`

@@ -148,6 +148,7 @@ A cadeia `ADR → RN → CA → UI → T → R → teste` é uma **matriz de ras
 - **Reversibilidade como critério** — decisões de "porta de mão dupla" × "mão única" (Jeff Bezos, carta aos acionistas de 2015) e *blast radius* (Google SRE).
 - **Mecânica de permissões** — [Claude Code settings](https://docs.claude.com/en/docs/claude-code/settings) e documentação de permissões e regras do Codex.
 - **Política de versões** — páginas oficiais de manutenção de cada stack (Rails, Ruby, Node, Python, .NET, Go, Java, PHP), citadas nos perfis em `stacks/`.
+- **Mensagens de commit** — [Conventional Commits 1.0.0](https://www.conventionalcommits.org/pt-br/v1.0.0/) (tipos, escopo, `!` e `BREAKING CHANGE`); convenção de assunto curto e corpo com o porquê, de *Pro Git* (Chacon e Straub). **Adaptação**: a `T-XX` entra no assunto ou no rodapé `Refs:`, e o padrão é escolha do usuário no setup — Conventional Commits é a recomendação, não a imposição.
 
 ---
 
@@ -213,6 +214,7 @@ Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#le
 7. **Eixo de segurança por stack** nos dois reviews.
 8. **Convenção de nome de teste por stack** para o elo `CA → teste`.
 9. **ADRs em arquivos próprios** (`docs/sdd/architecture/adrs/ADR-XXX-*.md`) com status de ciclo de vida, e campo opcional `Estimativa` nas tarefas do plano.
+10. **O kit nunca commita** — padrão de mensagem escolhido no setup, `/commit-message` para qualquer diff, mensagem da tarefa entregue só quando o review aprova e hash preenchido no histórico a partir do `git log`.
 
 ---
 
@@ -229,7 +231,6 @@ Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#le
 | **STRIDE / ASVS** | O eixo de segurança é checklist de diff, sem modelagem de ameaças |
 | **RTO / RPO** | Recuperação de desastre citada sem as métricas que a definem |
 | **eMAG e LBI (Lei 13.146/2015)** | Acessibilidade cita WCAG, não a norma brasileira |
-| **Conventional Commits** | Commits citam a `T-XX`, sem convenção de tipo/escopo |
 | **Calibração de estimativas com histórico** | O `spike` poderia comparar estimativa informada × tempo real das tarefas concluídas |
 | **Perfis completos para outras stacks** | Hoje só Rails tem checklists, heurísticas e exemplos próprios |
 

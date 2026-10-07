@@ -2,12 +2,22 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
-## [Não lançado]
+## [0.2.0] — 2026-10-07
+
+O kit nunca commita: ele entrega a mensagem pronta, no padrão que você escolheu.
+
+### Novo
+- **`/commit-message`** (`$commit-message` no Codex): escreve a mensagem de commit das alterações atuais — o que está preparado (staged) ou, sem isso, a árvore de trabalho — no padrão do projeto, acha a `T-XX` quando há plano e sugere dividir o commit quando o diff mistura assuntos. Só lê o repositório.
+- `templates/commit-message.md`: regras compartilhadas de tipo, escopo, assunto, corpo, rodapé e posição da `T-XX`.
 
 ### Setup
 - O `/sdd-setup` pergunta o **padrão das mensagens de commit**: Conventional Commits, ID da tarefa primeiro ou um padrão escrito pelo usuário. A escolha fica em `docs/sdd/config.yml` (`git.commit`) e numa linha do `AGENTS.md`; a opção que bate com o que o projeto já usa (commitlint, commitizen, hooks, histórico) vem recomendada.
-- **O kit nunca commita.** A pergunta "`git commit` pelo agente: liberado ou com confirmação?" saiu: `git commit` fica sempre em `ask`, e as skills entregam a mensagem pronta em texto. A chave `permissions.claude.git_commit` deixou de existir; o setup aponta configurações antigas com commit liberado.
-- `sdd-execute` monta a mensagem no padrão escolhido; `sdd-review` e `code-review` conferem se os commits seguem o padrão.
+- **O kit nunca commita.** A pergunta "`git commit` pelo agente: liberado ou com confirmação?" saiu: `git commit` fica sempre em `ask`. A chave `permissions.claude.git_commit` deixou de existir; o setup aponta configurações antigas com commit liberado.
+
+### Pipeline
+- A mensagem de commit da tarefa saiu do fim do `/sdd-execute` e passou para o fim do `/sdd-review`, entregue só quando a tarefa é aprovada — ninguém commita o que o review devolve como `Bloqueado`.
+- O `/sdd-review` preenche a coluna Commit do histórico do plano a partir do `git log` (commits que citam a `T-XX`), com confirmação; o `/sdd-next` aponta o hash encontrado.
+- `sdd-review` e `code-review` conferem se os commits seguem o padrão do projeto.
 
 ### Documentação
 - Crédito ao [leanwork-sdd](https://github.com/leanwork/leanwork-sdd) (Leanwork Group, MIT) como base do pipeline SDD: seção "Origem e créditos" no README, seção própria no REFERENCES.md e aviso de copyright no LICENSE.

@@ -121,14 +121,14 @@ permissions:
 | `code_review.*` | sim | `code-review`, `sdd-review` |
 | `spike.*` | não (valores padrão abaixo) | `spike`, `sdd-plan` (estimativa) |
 | `sdd.docs_root` | não (padrão `docs/sdd`) | todas as skills do pipeline |
-| `git.commit.*` | sim (perguntado no setup) | `sdd-execute` (mensagem sugerida), `sdd-review` e `code-review` (aderência dos commits) |
+| `git.commit.*` | sim (perguntado no setup) | `commit-message` e `sdd-review` (mensagem entregue em texto), `sdd-review` e `code-review` (aderência dos commits) |
 | `permissions.*` | não | `sdd-setup` |
 
 Padrões quando ausentes: `spike.hours_per_day: 6`, `spike.include_overheads: true`, `spike.overheads_pct: { code_review: 10, qa: 15, deploy: 5 }`, `sdd.docs_root: docs/sdd`, `project.language: pt-BR`. Sem `git.commit`, as skills usam `T-XX: <descrição>` e sugerem rodar o `/sdd-setup`.
 
 ### `git.commit` — padrão das mensagens
 
-O kit **nunca commita**: estas chaves só definem o formato da mensagem que as skills entregam em texto.
+O kit **nunca commita**: estas chaves só definem o formato da mensagem que as skills entregam em texto. As regras de montagem (tipo, escopo, assunto, corpo, rodapé) estão em `templates/commit-message.md`.
 
 | `convention` | `format` | `task_id` | `example` |
 | --- | --- | --- | --- |

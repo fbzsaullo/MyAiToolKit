@@ -8,8 +8,8 @@
     {
       "name": "my-ai-toolkit",
       "source": "./",
-      "description": "Pipeline Spec-Driven Development, setup multilinguagem, /spike e /code-review para agentes de IA.",
-      "version": "0.1.0",
+      "description": "Pipeline Spec-Driven Development, setup multilinguagem, /spike, /code-review e /commit-message para agentes de IA.",
+      "version": "0.2.0",
       "license": "MIT",
       "category": "workflow"
     }
