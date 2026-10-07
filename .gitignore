@@ -1,0 +1,13 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local agent settings (personal, never versioned)
+.claude/settings.local.json
+
+# Local installs / scratch output from adapters
+.agents/
+dist/
+tmp/

@@ -1,0 +1,31 @@
+name: Verificações
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Consistência do toolkit
+        run: bash scripts/check.sh
+
+      - name: Instalador do Codex (simulação em pasta temporária)
+        run: |
+          target="$(mktemp -d)"
+          bash adapters/codex/install.sh --scope repo --target "$target"
+          test -f "$target/.agents/skills/sdd-start/SKILL.md"
+          test -f "$target/.agents/myaitoolkit-shared/.installed"
+          if grep -rq --include='*.md' 'CLAUDE_PLUGIN_ROOT' "$target/.agents"; then
+            echo "Sobrou \${CLAUDE_PLUGIN_ROOT} sem substituir" >&2
+            exit 1
+          fi
+          bash adapters/codex/install.sh --scope repo --target "$target" --uninstall
+          test ! -e "$target/.agents/skills/sdd-start"

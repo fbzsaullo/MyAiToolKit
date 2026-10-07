@@ -1,0 +1,29 @@
+{
+  "name": "my-ai-toolkit",
+  "version": "0.1.0",
+  "description": "Toolkit open-source (projeto de faculdade) para desenvolvimento com agentes de IA: pipeline Spec-Driven Development (arquitetura → PRD → interface → plano → execução → review) com rastreabilidade ADR ↔ RN ↔ CA ↔ UI ↔ T ↔ R, setup multilinguagem que analisa a stack e as versões (Rails como referência), /spike para análise de esforço de cards e /code-review configurável com matriz de urgência × importância. Feito para Claude Code, com suporte a Codex.",
+  "author": {
+    "name": "Fabrizio"
+  },
+  "license": "MIT",
+  "keywords": [
+    "sdd",
+    "spec-driven-development",
+    "ai-agents",
+    "claude-code",
+    "codex",
+    "agents-md",
+    "prd",
+    "architecture",
+    "adr",
+    "planning",
+    "code-review",
+    "estimation",
+    "spike",
+    "rails",
+    "ruby",
+    "portuguese",
+    "open-source",
+    "college-project"
+  ]
+}

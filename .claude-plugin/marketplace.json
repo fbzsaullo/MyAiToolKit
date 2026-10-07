@@ -1,0 +1,17 @@
+{
+  "name": "my-ai-toolkit",
+  "owner": {
+    "name": "Fabrizio"
+  },
+  "description": "Marketplace do MyAiToolKit — o repositório é o próprio plugin. Adicione pelo caminho local depois de clonar.",
+  "plugins": [
+    {
+      "name": "my-ai-toolkit",
+      "source": "./",
+      "description": "Pipeline Spec-Driven Development, setup multilinguagem, /spike e /code-review para agentes de IA.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "category": "workflow"
+    }
+  ]
+}

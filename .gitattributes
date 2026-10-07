@@ -1,0 +1,5 @@
+# Finais de linha LF em tudo — scripts bash com CRLF quebram ("$'\r': command not found").
+* text=auto eol=lf
+
+# PowerShell lida bem com LF, mas o Windows PowerShell 5.1 prefere CRLF.
+*.ps1 text eol=crlf
