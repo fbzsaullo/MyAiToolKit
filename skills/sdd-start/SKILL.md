@@ -35,6 +35,8 @@ Pergunte **uma vez**, com opções claras:
 > **B.** Uma funcionalidade num sistema cuja arquitetura já existe — ir para o PRD (PRD → plano)
 > **C.** Algo que já tem PRD e só falta o plano — ir para o plano
 > **D.** Não sei — me ajuda a decidir
+> **E.** Um defeito para corrigir — ir para o fluxo de bug
+> **F.** Uma mudança num PRD já aprovado — revisar o escopo
 
 Conforme a resposta:
 
@@ -42,6 +44,8 @@ Conforme a resposta:
 - **B** — pergunte se há proposta de arquitetura ou ADRs para ler (em `docs/sdd/architecture/` ou outro caminho). Leia o que houver e siga `sdd-prd`.
 - **C** — peça o caminho do PRD, leia e siga `sdd-plan`.
 - **D** — faça duas ou três perguntas curtas (já existe código? há decisões de arquitetura registradas? há PRD?) e proponha o ponto de entrada.
+- **E** — siga a skill `sdd-bug`.
+- **F** — siga a skill `sdd-change`. Se a mudança é só uma decisão de arquitetura, siga `sdd-adr`.
 
 Depois do PRD, se houver interface, ofereça `sdd-prototype` antes do plano — sem obrigar.
 

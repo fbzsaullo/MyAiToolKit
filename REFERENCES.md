@@ -51,6 +51,8 @@ A cadeia `ADR → RN → CA → UI → T → R → teste` é uma **matriz de ras
 
 **Adaptação.** As normas exigem rastrear, mas não definem prefixos, formato de ID nem a ligação com o review — essa convenção vem do leanwork-sdd. O MyAiToolKit acrescenta o elo `CA → teste` com convenção de nome por stack (`templates/id-conventions.md`).
 
+**Mudança e análise de impacto.** A 29148 e o CMMI pedem que mudanças em requisitos sejam avaliadas pelo impacto antes de aceitas. O `sdd-change` faz isso seguindo a cadeia de IDs nos dois sentidos, e registra a revisão no próprio PRD (seção Revisões), em vez de num controle de mudanças à parte.
+
 ### Skills com carregamento sob demanda
 
 `SKILL.md` curta e `references/` lidas só quando necessárias:
@@ -119,7 +121,7 @@ A cadeia `ADR → RN → CA → UI → T → R → teste` é uma **matriz de ras
 - **Teste de caracterização** — **Michael Feathers**, *Working Effectively with Legacy Code* (2004).
 - **Expandir → migrar → contrair** — *Parallel Change*, [Martin Fowler](https://martinfowler.com/bliki/ParallelChange.html).
 - **Corte vertical / esqueleto andante** — **Alistair Cockburn** (walking skeleton) e **Jeff Patton** (story mapping); ver divergências.
-- Teste antes do código — **Kent Beck**, *Test-Driven Development by Example* (2002).
+- Teste antes do código — **Kent Beck**, *Test-Driven Development by Example* (2002). O `sdd-bug` aplica a mesma ideia à correção: o teste que reproduz o defeito vem primeiro, falha, e depois fica como teste de regressão.
 - Arrange-Act-Assert — Bill Wake (2001).
 - Cardinalidade de métricas — orientação de nomes do [Prometheus](https://prometheus.io/docs/practices/naming/) e do OpenTelemetry.
 - Feature flags — **Pete Hodgson**, [Feature Toggles](https://martinfowler.com/articles/feature-toggles.html) (2017).
@@ -215,6 +217,7 @@ Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#le
 8. **Convenção de nome de teste por stack** para o elo `CA → teste`.
 9. **ADRs em arquivos próprios** (`docs/sdd/architecture/adrs/ADR-XXX-*.md`) com status de ciclo de vida, e campo opcional `Estimativa` nas tarefas do plano.
 10. **O kit nunca commita** — padrão de mensagem escolhido no setup, `/commit-message` para qualquer diff, mensagem da tarefa entregue só quando o review aprova e hash preenchido no histórico a partir do `git log`.
+11. **Gestão de mudança no pipeline** — `sdd-change` (impacto por ID, revisão registrada, tarefas canceladas em vez de apagadas), `sdd-bug` (bug como tarefa com teste de regressão ligado ao cenário descumprido) e `sdd-adr` (decisão avulsa com ciclo de vida), mais o status `Cancelado` e a marca `estrutural` nas tarefas.
 
 ---
 

@@ -42,7 +42,7 @@ Se a tarefa aparece em "Pontos de validação humana" do plano, peça confirmaç
 
 ## Passo 4 — Marcar o início
 
-Mude o `**Status:**` para `Em andamento` antes de começar. Assim, se a sessão cair, o `sdd-next` mostra onde parou em vez de oferecer a tarefa como intocada.
+Tarefa `Cancelado` não se executa: avise e pare. Mude o `**Status:**` para `Em andamento` antes de começar. Assim, se a sessão cair, o `sdd-next` mostra onde parou em vez de oferecer a tarefa como intocada.
 
 ## Passo 5 — Implementar
 

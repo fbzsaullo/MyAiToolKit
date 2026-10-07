@@ -37,6 +37,8 @@ meu-projeto/
 │       │   └── MATRIX-001-carrinho.md     # gerada pelo sdd-trace
 │       ├── spikes/
 │       │   └── SPIKE-PROJ-123-checkout-parcelado.md
+│       ├── bugs/
+│       │   └── BUG-PROJ-88-link-expirado-aceito.md   # gerado pelo sdd-bug
 │       └── code-reviews/
 │           └── CR-feature-carrinho-2026-10-06.md
 ├── app/ (ou src/)
@@ -55,7 +57,7 @@ meu-projeto/
 
 - **Um PRD por épico ou funcionalidade grande** — `PRD-XXX-tema.md`.
 - O contador é do projeto inteiro e não reinicia com o tempo.
-- Mudança de escopo grande pode gerar `-v2`; ajuste pequeno é feito no próprio arquivo, atualizando a data do cabeçalho.
+- Mudança de escopo grande pode gerar `-v2`; ajuste num PRD aprovado passa pelo `sdd-change`, no próprio arquivo, com uma linha na seção **Revisões** (`id-conventions.md`).
 
 ### `prototype/`
 
@@ -68,6 +70,7 @@ meu-projeto/
 
 - **Um plano para cada PRD**, com o mesmo número: `PLAN-001` acompanha o `PRD-001`.
 - O plano não é reescrito durante a execução; ele é **atualizado** (status das tarefas, histórico, estimativa informada pelo usuário).
+- Correções de bug entram no plano do PRD atingido, numa fase "Correções". Bug sem PRD vai para `PLAN-000-correcoes.md`, um plano permanente só de correções (o `000` nunca acompanha um PRD).
 
 ### `reviews/`
 
@@ -85,6 +88,11 @@ meu-projeto/
 
 - Uma análise por card: `SPIKE-<CHAVE>-tema.md` (a chave vem do board; sem chave, sequencial `SPIKE-001`).
 - Guarda **apenas as horas que o usuário informou**. A sugestão da IA não é gravada.
+
+### `bugs/`
+
+- Um relatório por defeito: `BUG-<CHAVE>-tema.md` (chave do board; sem chave, sequencial `BUG-001`).
+- Guarda o relato, a reprodução e o diagnóstico. A execução da correção vive no plano, como uma tarefa `T-XX`.
 
 ### `code-reviews/`
 

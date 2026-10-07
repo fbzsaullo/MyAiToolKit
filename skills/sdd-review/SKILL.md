@@ -28,7 +28,7 @@ O review responde a uma pergunta objetiva: **a tarefa entregou o que prometeu?**
 2. na última mensagem de commit (`git log -1 --pretty=%B`);
 3. não achou: pergunte — "Qual tarefa do plano esta implementação entrega (ex.: T-04)?"
 
-Um PR que entrega várias tarefas gera **um relatório por tarefa**, mais um resumo conjunto na conversa.
+Um PR que entrega várias tarefas gera **um relatório por tarefa**, mais um resumo conjunto na conversa. Tarefa `Cancelado` não se revisa: se o diff traz código dela, aponte isso como divergência do plano.
 
 **Rounds anteriores.** Procure `docs/sdd/reviews/REVIEW-T-XX-*.md`. Existindo, este é o round N+1 — siga "Segundo round em diante" abaixo. Isso faz parte do fluxo normal: revisar de novo sem olhar o round anterior perde justamente a informação que motivou o re-review.
 

@@ -25,7 +25,7 @@ Procure primeiro nos caminhos padrão e, se não achar, na raiz e em `docs/`:
 - **Arquitetura** — há ADRs? Quantos `Aceito` × `Proposto`? Diagramas C4? Restou `[A DEFINIR]` ou `⚠️ Premissa`?
 - **PRD** — tem `RN` e `CA`? Qual o status do documento (`Rascunho` / `Em revisão` / `Aprovado`)?
 - **SPEC-UI** — existe para os PRDs com interface? Lacunas da seção 8 ainda abertas? *(Ausência só importa quando o PRD tem telas.)*
-- **Plano** — quantas tarefas? Quantas `Concluído`, `Em andamento`, `Bloqueado`?
+- **Plano** — quantas tarefas? Quantas `Concluído`, `Em andamento`, `Bloqueado`, `Cancelado`? Canceladas não entram na conta do que falta.
 - **Reviews** — quantos? Quantos com recomendação `Bloqueado`? Há tarefa `Concluído` sem review?
 - **Contexto do agente** — existe `docs/sdd/config.yml`? `AGENTS.md`/`CLAUDE.md` com stack, comandos e convenções? Há `<!-- TODO -->` pendente? Módulo novo sem contexto? Projeto com código e sem `.claude/settings.json` (quando usa Claude Code)?
 

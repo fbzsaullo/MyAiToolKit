@@ -76,7 +76,7 @@ Ajuste à funcionalidade: algo pequeno pode ter 2 fases; algo grande, 6. Quando 
 - **Complexidade:** [Baixa / Média / Alta]
 - **Estimativa:** *(vazio — preenchido apenas com o valor informado pelo usuário)*
 - **Depende de:** [nenhuma | T-XX, T-YY]
-- **Implementa:** [RN-XX, RN-YY] *(regras que a tarefa coloca em código; vazio em tarefa só estrutural)*
+- **Implementa:** [RN-XX, RN-YY] *(regras que a tarefa coloca em código; em tarefa sem regra, `estrutural — <motivo>`)*
 - **Valida:** [CA-XX] *(cenários que ficam verdes ao concluir; vazio em tarefa preparatória)*
 - **Decisões base:** [ADR-XXX] *(opcional; apenas ADRs com status Aceito)*
 - **Telas:** [UI-XX (estados)] *(só em tarefa de interface de projeto com SPEC-UI)*
@@ -102,7 +102,7 @@ Nomes dos testes que provam cenários seguem a convenção do projeto em `docs/s
 **Riscos / atenção:**
 - [ex.: "tabela com 3 milhões de linhas — índice criado com `algorithm: :concurrently`"]
 
-> **Status aceitos (texto exato):** `Pendente` | `Em andamento` | `Concluído` | `Bloqueado`, sem emoji. `sdd-next` e
+> **Status aceitos (texto exato):** `Pendente` | `Em andamento` | `Concluído` | `Bloqueado` | `Cancelado`, sem emoji. `sdd-next` e
 > `sdd-trace` leem o campo literalmente — outra grafia esconde a tarefa. O mesmo vale para a coluna Status do
 > histórico (seção 11). Referência: `templates/id-conventions.md`.
 

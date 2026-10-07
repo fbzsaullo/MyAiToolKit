@@ -96,7 +96,7 @@ Salve em `docs/sdd/prds/PRD-XXX-tema.md` (numeração e nome em `${CLAUDE_PLUGIN
 
 **Pedido de PRD "rápido"** — mantenha as seções obrigatórias e corte as opcionais. Regras de negócio e critérios de aceite nunca saem: são o motivo de o PRD existir.
 
-**Revisar um PRD que já existe** — primeiro mostre o que falta em relação ao modelo; só reescreva depois de confirmar, principalmente se a mudança for estrutural.
+**Revisar um PRD que já existe** — primeiro mostre o que falta em relação ao modelo; só reescreva depois de confirmar, principalmente se a mudança for estrutural. Se o PRD já está `Aprovado` e a mudança é de escopo, use o `sdd-change`: ele registra a revisão e leva a mudança para a SPEC-UI e o plano.
 
 **Demanda grande demais** — proponha dividir em mais de um PRD (por funcionalidade ou por épico) e explique o critério da divisão.
 

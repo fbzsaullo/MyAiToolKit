@@ -33,13 +33,15 @@ Com mais de um PRD, pergunte qual analisar. Um por vez.
 **Do plano:** cada bloco `#### T-XX` com `Implementa`, `Valida`, `Decisões base`, `Telas` e `**Status:**`. Cuidados de leitura:
 - o `Status:` do cabeçalho é do documento — só contam os que estão dentro de um bloco de tarefa;
 - o bloco da tarefa é a verdade; a tabela de histórico é o registro. Se discordarem, é inconsistência a reportar, não algo para você decidir;
-- valor fora do vocabulário (`Pendente` / `Em andamento` / `Concluído` / `Bloqueado`, ou o equivalente em `en` conforme `config.yml`) é um gap — reporte a grafia encontrada.
+- valor fora do vocabulário (`Pendente` / `Em andamento` / `Concluído` / `Bloqueado` / `Cancelado`, ou o equivalente em `en` conforme `config.yml`) é um gap — reporte a grafia encontrada.
 
 **Da SPEC-UI (se houver):** `UI-XX`, estados (`UI-XX.estado`), as `RN`/`CA` de cada tela e as lacunas da seção 8. Sem SPEC-UI, **não é lacuna** — apenas omita as colunas de interface.
 
 **Dos reviews:** arquivos `REVIEW-T-XX-*.md`, cada `R-XX` com severidade e a recomendação final. Como `R-XX` recomeça em cada arquivo, guarde sempre o par número + arquivo.
 
 **Dos testes:** procure cada `CA-XX` nos diretórios de teste, no formato de nome configurado (ex.: `CA-05` em `it "CA-05: ..."`). Encontrar o ID no teste é o que fecha o último elo.
+
+**Revogados e cancelados:** `RN`, `CA` e `UI` riscados (revogados) saem da cobertura — não são cobrados nem contam como elo quebrado; aparecem numa linha própria da matriz, com o ID que os substitui. Tarefas `Cancelado` também não cobrem nada: o `CA` que só elas validavam é apontado no Passo 4.
 
 ## Passo 3 — Montar a matriz
 
@@ -89,7 +91,9 @@ Para cada item, diga onde está e qual o risco:
 - **Regra sem cenário** — `RN` que nenhum `CA` prova → regra sem teste.
 - **Cenário sem tarefa** — `CA` que nenhuma tarefa valida → critério órfão.
 - **Cenário sem teste** — `CA` cujo ID não aparece em nenhum teste → cobertura só no papel.
-- **Tarefa sem rastro** — sem `Implementa` nem `Valida` → propósito pouco claro (pode ser legítimo em tarefa estrutural; investigue).
+- **Tarefa sem rastro** — sem `Implementa` nem `Valida` e sem a marca `estrutural` → propósito pouco claro. Tarefa com `Implementa: estrutural — <motivo>` é legítima e não entra aqui.
+- **Cenário só com tarefa cancelada** — `CA` em vigor cujas únicas tarefas estão `Cancelado` → o escopo foi revogado no plano e não no PRD, ou falta a tarefa nova.
+- **Revisão sem registro** — PRD ou SPEC-UI com ID riscado (revogado) que não aparece com `−` em nenhuma linha da seção **Revisões** → mudança que ninguém consegue rastrear.
 - **ADR citado e inexistente** — referência quebrada.
 - **ADR que ninguém cita** — decisão sem efeito rastreável (sinal possível de excesso de engenharia).
 - **Tarefa apoiada em ADR não aceito** — `Decisões base` aponta ADR `Proposto`, `Substituído` ou `Descontinuado`.

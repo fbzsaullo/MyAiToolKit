@@ -176,6 +176,14 @@ Cada item precisa de decisão antes do plano — ou de aceite explícito como fo
 - [ex.: contraste mínimo WCAG AA]
 - [ex.: funciona sem JavaScript nas telas de leitura]
 - [ex.: usar só os componentes do design system existente]
+
+## 10. Revisões (obrigatória depois da primeira mudança na SPEC-UI aprovada)
+
+[Mesma tabela do PRD, com o mesmo número de revisão do PRD que motivou a mudança. Sem revisões, remova a seção.]
+
+| Nº | Data | O que mudou | IDs | Motivo / origem |
+| --- | --- | --- | --- | --- |
+| 1 | [AAAA-MM-DD] | [resumo] | [+UI-XX.estado, −UI-XX] | [Revisão 1 do PRD-XXX] |
 ````
 
 ---

@@ -30,6 +30,9 @@ O kit reúne três frentes:
 | `/sdd-trace` | Matriz de rastreabilidade `ADR ↔ RN ↔ CA ↔ UI ↔ T ↔ R ↔ teste` e os elos quebrados |
 | `/sdd-next` | Mostra onde o projeto está e sugere o próximo passo |
 | `/sdd-setup` | Analisa a stack e as versões e gera a configuração dos agentes |
+| `/sdd-change` | Muda o escopo de um PRD aprovado: mostra o impacto em cada ID, registra a revisão e ajusta SPEC-UI e plano sem perder o rastro |
+| `/sdd-bug` | Do relato do defeito a **uma** tarefa de correção com teste de regressão: acha o cenário descumprido e a causa provável |
+| `/sdd-adr` | Registra, substitui ou descontinua **uma** decisão de arquitetura, sem refazer a proposta inteira |
 
 ### Ferramentas
 
@@ -91,6 +94,7 @@ O kit reúne três frentes:
                                                    └── uma tarefa por ciclo ──┘
 
 sdd-setup, sdd-next e sdd-trace acompanham o pipeline inteiro
+sdd-change, sdd-bug e sdd-adr entram quando o escopo muda, aparece um defeito ou surge uma decisão
 * opcional — só para PRDs com telas
 ```
 

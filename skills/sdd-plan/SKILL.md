@@ -107,7 +107,8 @@ A sugestão da IA nunca vai para o arquivo. Regra completa em `${CLAUDE_PLUGIN_R
 
 - **Idioma** — o `language` de `docs/sdd/config.yml` (padrão `pt-BR`). Termos técnicos consagrados (migration, job, endpoint, controller) podem ficar em inglês.
 - **Numeração** — `T-01` … `T-NN`, contínua no plano inteiro; não reinicia por fase.
-- **Status** — o campo `**Status:**` de cada tarefa aceita somente `Pendente`, `Em andamento`, `Concluído` ou `Bloqueado`, escritos por extenso e sem emoji. Toda tarefa nasce `Pendente`. `sdd-next` e `sdd-trace` leem esse texto literalmente.
+- **Status** — o campo `**Status:**` de cada tarefa aceita somente `Pendente`, `Em andamento`, `Concluído`, `Bloqueado` ou `Cancelado`, escritos por extenso e sem emoji. Toda tarefa nasce `Pendente`; `Cancelado` só entra quando o escopo muda (`sdd-change`).
+- **Tarefa estrutural** — tarefa que não coloca regra em código (projeto, infraestrutura, documentação) escreve `**Implementa:** estrutural — <motivo>` e, de preferência, cita o ADR em `Decisões base`. Campo vazio, sem `estrutural`, é tarefa sem rastro. `sdd-next` e `sdd-trace` leem esse texto literalmente.
 - **Checkbox** — `- [ ]` / `- [x]` em critérios de aceite, testes transversais, prontidão e pontos em aberto. **Nunca** no status: duas representações do mesmo estado acabam se contradizendo.
 - **Tamanho** — tudo dentro do teto de **30min a 4h** (regra de `T-XX` em `templates/id-conventions.md`):
   - *pequena* (um commit, ~30min–2h): mudança isolada com teste óbvio — "criar o model Consulta com validações";
@@ -137,7 +138,7 @@ A sugestão da IA nunca vai para o arquivo. Regra completa em `${CLAUDE_PLUGIN_R
 
 **Funcionalidade pequena (1–3 tarefas)** — mantenha o modelo, comprimido: fases e mapa viram opcionais; critérios de aceite e testes por tarefa continuam obrigatórios.
 
-**Atualizar um plano existente** — leia o plano atual, identifique o que já foi concluído e mostre a diferença proposta antes de reescrever. Nunca apague o histórico sem confirmação.
+**Atualizar um plano existente** — leia o plano atual, identifique o que já foi concluído e mostre a diferença proposta antes de reescrever. Nunca apague o histórico sem confirmação. Se a atualização nasce de uma mudança no PRD aprovado, o caminho é o `sdd-change`, que ajusta PRD, SPEC-UI e plano juntos.
 
 **Tarefa grande demais** — divida antes de gravar. Sinais: mais de 3 critérios de aceite, critério que precisa de mais de 2 testes, descrição que pede "e também", mais de 4h na sua cabeça. Lista completa em `references/task-examples.md`.
 
@@ -154,5 +155,11 @@ Cada tarefa deixa o CI verde sozinha, ao custo de mais tarefas.
 **Marcar andamento** — pedidos como "marca a T-04 como concluída" alteram só o necessário e acrescentam uma linha no histórico (com commit, se houver). A execução normal é responsabilidade do `sdd-execute`.
 
 ## Ao entregar
+
+Antes de gravar, com SPEC-UI, confira a cobertura de interface — é o mesmo teste que o `sdd-trace` faz no fim, só que agora, quando corrigir é barato:
+
+- toda tela `UI-XX` aparece em `Telas:` de alguma tarefa;
+- todo estado `UI-XX.estado` da SPEC-UI aparece entre os parênteses de alguma tarefa (`Telas: UI-03 (default, erro)`). Tela citada sem estados não cobre os estados;
+- o que ficar de fora entra numa tarefa ou é justificado nas premissas do plano.
 
 Mostre o número de tarefas por fase, os pontos de validação humana e a primeira tarefa elegível. Sugira o próximo passo: `/sdd-execute` (ou `$sdd-execute` no Codex) para executar a primeira tarefa.

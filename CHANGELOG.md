@@ -2,6 +2,26 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.0] — 2026-10-07
+
+O pipeline passa a lidar com o que acontece depois do plano: escopo que muda, defeito que aparece, decisão que surge no meio do caminho.
+
+### Novo
+- **`/sdd-change`**: muda o escopo de um PRD aprovado. Mostra o impacto em cada ID (RN, CA, UI, T, ADR, testes) antes de editar, registra a revisão no PRD e na SPEC-UI, e ajusta o plano — tarefas pendentes editadas, concluídas nunca reabertas, uma fase nova para o que muda e tarefas sem sentido marcadas `Cancelado`.
+- **`/sdd-bug`**: do relato a **uma** tarefa de correção. Separa observado de esperado, acha o cenário descumprido (ou a lacuna no PRD), investiga a causa provável sem mexer no código e cria a tarefa com teste de regressão. Relatório em `docs/sdd/bugs/BUG-<CHAVE>-*.md`; bug sem PRD vai para `PLAN-000-correcoes.md`.
+- **`/sdd-adr`**: registra uma decisão avulsa, substitui ou descontinua um ADR, mantém o índice da proposta e avisa quais tarefas se apoiam na decisão que mudou.
+- `/sdd-start` ganha as opções **E** (defeito → `sdd-bug`) e **F** (mudança em PRD aprovado → `sdd-change`).
+
+### Convenções
+- Status de tarefa **`Cancelado`** (`Canceled`): para tarefa que perdeu o sentido; o bloco fica e o número não volta. Lido por `sdd-next`, `sdd-trace`, `sdd-execute` e `sdd-review`.
+- **Tarefa estrutural**: `Implementa: estrutural — <motivo>` marca tarefa sem regra (projeto, infraestrutura, documentação); o `sdd-trace` deixa de apontá-la como "sem rastro".
+- Seção **Revisões** no PRD (18) e na SPEC-UI (10), com notação `+` novo, `~` alterado, `−` revogado.
+- ID `BUG-<CHAVE>` e pasta `docs/sdd/bugs/`.
+
+### Pipeline
+- O `/sdd-plan` confere, antes de entregar, se toda tela e todo estado da SPEC-UI aparecem em alguma tarefa — a mesma checagem que o `sdd-trace` faz no fim, só que quando corrigir é barato.
+- O `/sdd-trace` aponta cenário coberto só por tarefa cancelada e revogação sem linha em Revisões, e tira da cobertura os IDs revogados.
+
 ## [0.2.0] — 2026-10-07
 
 O kit nunca commita: ele entrega a mensagem pronta, no padrão que você escolheu.

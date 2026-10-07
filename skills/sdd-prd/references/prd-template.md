@@ -182,4 +182,12 @@ flowchart LR
 - [card, conversa, protótipo, documento]
 - [proposta arquitetural: `docs/sdd/architecture/proposta-arquitetural.md`]
 - [ADRs citados: `docs/sdd/architecture/adrs/ADR-XXX-*.md`]
+
+## 18. Revisões (obrigatória depois da primeira mudança no PRD aprovado)
+
+[Uma linha por revisão, feita pelo `sdd-change` (ou pelo `sdd-bug`, quando ele acrescenta um cenário). Notação: `+` novo, `~` alterado, `−` revogado. Regra em `templates/id-conventions.md`, "Revisões de PRD e SPEC-UI". Sem revisões, remova a seção.]
+
+| Nº | Data | O que mudou | IDs | Motivo / origem |
+| --- | --- | --- | --- | --- |
+| 1 | [AAAA-MM-DD] | [resumo] | [+RN-XX, ~CA-XX, −CA-XX] | [pedido, card ou BUG-<CHAVE>] |
 ````

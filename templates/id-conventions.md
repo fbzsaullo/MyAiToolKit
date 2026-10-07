@@ -20,9 +20,10 @@ Todo artefato produzido pelo toolkit se conecta aos demais por meio de identific
 | Prefixo | O que identifica | Arquivo de origem | Quem consome |
 |---------|------------------|-------------------|--------------|
 | `SPIKE-<CHAVE>` | Uma análise de esforço | `docs/sdd/spikes/SPIKE-<CHAVE>-*.md` | Plano (insumo opcional da `Estimativa`), o próprio card |
+| `BUG-<CHAVE>` | Um defeito investigado pelo `sdd-bug` | `docs/sdd/bugs/BUG-<CHAVE>-*.md` | Tarefa de correção no plano, revisão do PRD (motivo), nome do teste de regressão quando não há PRD |
 | `CR-XX` | Um apontamento de code review avulso | `docs/sdd/code-reviews/CR-*.md` | Conversa, comentários de PR |
 
-`<CHAVE>` reaproveita a chave que o card já tem no board (`PROJ-123`, `GH-45`). Quando a demanda chega como texto solto, usa-se um sequencial de três dígitos: `SPIKE-001`, `SPIKE-002`.
+`<CHAVE>` reaproveita a chave que o card já tem no board (`PROJ-123`, `GH-45`). Quando a demanda chega como texto solto, usa-se um sequencial de três dígitos, com contador próprio por prefixo: `SPIKE-001`, `SPIKE-002`; `BUG-001`, `BUG-002`.
 
 ## Como numerar
 
@@ -76,8 +77,9 @@ O campo `**Status:**` dentro de cada bloco `#### T-XX` aceita quatro valores, e 
 | `Em andamento` | `In progress` | Começou e ainda não terminou. |
 | `Concluído` | `Done` | Critérios de aceite cumpridos e testes verdes. |
 | `Bloqueado` | `Blocked` | Algo impede o avanço: dependência, decisão pendente ou apontamento Bloqueante de review. |
+| `Cancelado` | `Canceled` | A tarefa perdeu o sentido (escopo revogado pelo `sdd-change`, por exemplo). O bloco fica no plano, o número não volta, e o motivo vai para o histórico. Nunca se aplica a uma tarefa `Concluído`. |
 
-Caminho normal: `Pendente` → `Em andamento` → `Concluído`. Qualquer estado pode cair em `Bloqueado`; quando o impedimento é resolvido, a tarefa volta para onde estava.
+Caminho normal: `Pendente` → `Em andamento` → `Concluído`. `Cancelado` é final e só vale para o que não foi concluído. Qualquer estado pode cair em `Bloqueado`; quando o impedimento é resolvido, a tarefa volta para onde estava.
 
 Esses valores são lidos por máquina. `sdd-next` e `sdd-trace` procuram o texto exato; uma tarefa marcada como `Feita`, `OK` ou `✅` simplesmente não é encontrada. Como o plano é o único registro de execução, uma tarefa que ele não descreve corretamente deixa de existir para o restante do toolkit.
 
@@ -88,7 +90,7 @@ A palavra aparece em quatro contextos, com listas de valores diferentes — e al
 | Contexto | Localização | Valores aceitos |
 |----------|-------------|-----------------|
 | Documento | Cabeçalho do PRD, da SPEC-UI ou do plano | PRD e SPEC-UI: `Rascunho` / `Em revisão` / `Aprovado`. Plano: `Rascunho` / `Em execução` / `Concluído` |
-| Tarefa | `**Status:**` dentro de `#### T-XX` | `Pendente` / `Em andamento` / `Concluído` / `Bloqueado` |
+| Tarefa | `**Status:**` dentro de `#### T-XX` | `Pendente` / `Em andamento` / `Concluído` / `Bloqueado` / `Cancelado` |
 | Review | Recomendação final do relatório | `Aprovado` / `Aprovado com ressalvas` / `Bloqueado` |
 | ADR | `**Status:**` no arquivo do ADR | `Proposto` / `Aceito` / `Substituído por ADR-XXX` / `Descontinuado` |
 
@@ -103,6 +105,33 @@ Nenhuma skill grava estimativa por conta própria. Sempre que houver horas envol
 3. **O arquivo recebe só a resposta do usuário.** A sugestão da IA fica registrada apenas na conversa.
 
 Sem resposta do usuário, o campo fica em branco. Silêncio não é aceite.
+
+## Tarefa estrutural
+
+Nem toda tarefa coloca uma regra em código: criar o projeto, montar a infraestrutura de testes, escrever o README, corrigir um bug fora de qualquer PRD. Essas tarefas declaram isso no lugar das regras:
+
+```markdown
+- **Implementa:** estrutural — infraestrutura de testes e orçamento de JS
+- **Valida:** —
+- **Decisões base:** ADR-012
+```
+
+O `sdd-trace` aceita `estrutural` como rastro legítimo. Tarefa com `Implementa` e `Valida` vazios, **sem** a palavra `estrutural`, continua sendo apontada como "tarefa sem rastro".
+
+## Revisões de PRD e SPEC-UI
+
+Um PRD aprovado que muda (pelo `sdd-change`, ou por um `CA` novo que o `sdd-bug` propôs) ganha uma linha na seção **Revisões**, no fim do documento:
+
+```markdown
+## Revisões
+
+| Nº | Data | O que mudou | IDs | Motivo / origem |
+| --- | --- | --- | --- | --- |
+| 1 | 2026-10-12 | Token mais curto; login social fora do escopo | ~RN-02, ~CA-03, −RN-07, −CA-10 | Pedido do cliente (PROJ-140) |
+| 2 | 2026-10-20 | Cenário que faltava para o link expirado | +CA-19 | BUG-PROJ-88 |
+```
+
+Notação: `+` novo, `~` alterado, `−` revogado. A SPEC-UI usa a mesma tabela, com o mesmo número de revisão do PRD que a motivou.
 
 ## Revogando regras e telas
 
