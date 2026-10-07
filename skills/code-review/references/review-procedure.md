@@ -93,7 +93,7 @@ Sugestão: `where(status: params[:status])` (ou um `enum` com lista permitida).
 
 ### Checklist antes do PR (modo próprio)
 
-Lista curta e acionável: os Q1 e Q3 a resolver, os Q2 a registrar, os comandos a rodar (lint, testes) e a descrição do PR a escrever (citando a história e o que foi testado).
+Lista curta e acionável: os Q1 e Q3 a resolver, os Q2 a registrar, os comandos a rodar (lint, testes) e a descrição do PR a escrever (citando a história e o que foi testado) — o `/pr-description` monta esse texto a partir do diff, do card e deste relatório.
 
 ## 6. Não fazer
 

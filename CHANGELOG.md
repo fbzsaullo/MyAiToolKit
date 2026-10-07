@@ -2,6 +2,15 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.1] — 2026-10-07
+
+### Novo
+- **`/pr-description`** (`$pr-description` no Codex): escreve título e descrição do Pull Request a partir do diff contra a base (perguntada sempre, como no `/code-review`) — o que muda e por quê, rastreabilidade (`T-XX`, RN, CA, UI, ADR, card, BUG), como testar com os comandos do `config.yml`, cenários cobertos por teste, resultado do review SDD e do code review, riscos de implantação. Usa o modelo de PR do repositório quando existe; senão, `references/pr-template.md`. Entrega em texto: nunca abre, edita nem comenta PR, e nunca faz push.
+- `sdd-review` e `code-review` sugerem o `/pr-description` quando o trabalho da branch está pronto.
+
+### Corrigido
+- README: a nota sobre o `/code-review` nativo e as chamadas no Codex tinha um trecho do início do arquivo colado no meio (introduzido na 0.2.0).
+
 ## [0.3.0] — 2026-10-07
 
 O pipeline passa a lidar com o que acontece depois do plano: escopo que muda, defeito que aparece, decisão que surge no meio do caminho.

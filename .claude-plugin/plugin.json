@@ -1,7 +1,7 @@
 {
   "name": "my-ai-toolkit",
-  "version": "0.3.0",
-  "description": "Toolkit open-source (projeto de faculdade) para desenvolvimento com agentes de IA: pipeline Spec-Driven Development (arquitetura → PRD → interface → plano → execução → review) com rastreabilidade ADR ↔ RN ↔ CA ↔ UI ↔ T ↔ R, setup multilinguagem que analisa a stack e as versões (Rails como referência), /spike para análise de esforço de cards, /code-review configurável com matriz de urgência × importância, /commit-message no padrão de commit do projeto (o kit nunca commita) e fluxos de mudança — /sdd-change, /sdd-bug e /sdd-adr. Feito para Claude Code, com suporte a Codex.",
+  "version": "0.3.1",
+  "description": "Toolkit open-source (projeto de faculdade) para desenvolvimento com agentes de IA: pipeline Spec-Driven Development (arquitetura → PRD → interface → plano → execução → review) com rastreabilidade ADR ↔ RN ↔ CA ↔ UI ↔ T ↔ R, setup multilinguagem que analisa a stack e as versões (Rails como referência), /spike para análise de esforço de cards, /code-review configurável com matriz de urgência × importância, /commit-message e /pr-description em texto (o kit nunca commita nem abre PR) e fluxos de mudança — /sdd-change, /sdd-bug e /sdd-adr. Feito para Claude Code, com suporte a Codex.",
   "author": {
     "name": "Fabrizio"
   },

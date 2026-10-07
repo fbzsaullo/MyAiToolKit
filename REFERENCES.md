@@ -216,7 +216,7 @@ Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#le
 7. **Eixo de segurança por stack** nos dois reviews.
 8. **Convenção de nome de teste por stack** para o elo `CA → teste`.
 9. **ADRs em arquivos próprios** (`docs/sdd/architecture/adrs/ADR-XXX-*.md`) com status de ciclo de vida, e campo opcional `Estimativa` nas tarefas do plano.
-10. **O kit nunca commita** — padrão de mensagem escolhido no setup, `/commit-message` para qualquer diff, mensagem da tarefa entregue só quando o review aprova e hash preenchido no histórico a partir do `git log`.
+10. **O kit nunca commita nem abre PR** — padrão de mensagem escolhido no setup, `/commit-message` para qualquer diff, mensagem da tarefa entregue só quando o review aprova, hash preenchido no histórico a partir do `git log` e `/pr-description` montando o texto do PR com a rastreabilidade e os reviews.
 11. **Gestão de mudança no pipeline** — `sdd-change` (impacto por ID, revisão registrada, tarefas canceladas em vez de apagadas), `sdd-bug` (bug como tarefa com teste de regressão ligado ao cenário descumprido) e `sdd-adr` (decisão avulsa com ciclo de vida), mais o status `Cancelado` e a marca `estrutural` nas tarefas.
 
 ---

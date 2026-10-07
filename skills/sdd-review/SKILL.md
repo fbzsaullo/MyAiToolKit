@@ -115,6 +115,8 @@ Se o diff revisado trouxe coisas fora da tarefa, sugira separar em outro commit.
 
 **Bloqueado** — sem mensagem. Ela sai no round que aprovar.
 
+Quando a tarefa aprovada fecha o trabalho da branch, sugira em uma linha o `/pr-description` para o texto do PR.
+
 **Hash no histórico** — sempre que este passo rodar, procure as linhas do histórico com `Concluído` e a coluna Commit vazia (`—` ou em branco), inclusive de tarefas anteriores:
 1. para cada uma, `git log --oneline --grep "T-XX"` (só leitura);
 2. **um** commit encontrado: proponha preencher com o hash curto;
