@@ -16,6 +16,20 @@ Como este é um projeto acadêmico, a regra aqui é simples: crédito a quem é 
 
 ## Base comum
 
+### leanwork-sdd — base do pipeline
+
+O pipeline SDD foi construído a partir do **[leanwork-sdd](https://github.com/leanwork/leanwork-sdd)** (Leanwork Group, licença MIT), que serviu de referência para a estrutura de fases e o modelo de rastreabilidade. Vêm de lá, entre outros:
+
+- a sequência arquitetura → PRD → protótipo → plano → execução → review, com comandos de entrada (`start`), próximo passo (`next`) e auditoria de rastreabilidade (`trace`);
+- a cadeia `ADR → RN → CA → UI → T → R` como grafo único, com o review como último elo;
+- o cenário Gherkin ligado à regra e à decisão (`Cenário [CA-XX]: … (RN-XX)` / `(ADR-XXX)`);
+- o protótipo como especificação rastreável (SPEC-UI com matriz `UI ↔ RN ↔ CA`, lacuna declarada e origem marcada de cada informação) e o sufixo de estado de tela (`UI-02.erro`);
+- os eixos de aderência ao plano e de rastreabilidade no review;
+- a classificação de permissões em `allow` / `ask` / `deny` e a divisão do contexto em raiz × módulo;
+- a organização das referências por skill e vários limiares de calibragem (por exemplo, tarefas de 30min–4h).
+
+**Adaptação.** Os textos foram reescritos em português e reorganizados; as partes acrescentadas por este projeto estão em [O que o MyAiToolKit acrescenta](#o-que-o-myaitoolkit-acrescenta). A literatura citada nas seções abaixo é, em boa parte, a mesma que o leanwork-sdd já documenta como fundamento.
+
 ### Spec-Driven Development
 
 A ideia de especificar antes de implementar, com artefatos versionados que um agente de IA consome, aparece em ferramentas recentes:
@@ -23,7 +37,7 @@ A ideia de especificar antes de implementar, com artefatos versionados que um ag
 - **[GitHub Spec Kit](https://github.com/github/spec-kit)** — fluxo especificar → planejar → quebrar em tarefas → implementar.
 - **[Kiro](https://kiro.dev)** — requisitos, desenho e tarefas como arquivos separados.
 
-**Adaptação.** O toolkit organiza o fluxo em arquitetura → requisitos → interface (opcional) → plano → execução → review, usa Gherkin no idioma do projeto e liga todas as fases por IDs.
+**Adaptação.** O fluxo arquitetura → requisitos → interface (opcional) → plano → execução → review, com Gherkin no idioma do projeto e todas as fases ligadas por IDs, segue o desenho do leanwork-sdd.
 
 A raiz mais antiga — requisito escrito antes do código, verificável e separado do desenho — está na **[ISO/IEC/IEEE 29148:2018](https://www.iso.org/standard/72089.html)** (sucessora da IEEE 830) e em **Michael Jackson**, *Problem Frames* (2001).
 
@@ -35,7 +49,7 @@ A cadeia `ADR → RN → CA → UI → T → R → teste` é uma **matriz de ras
 - **CMMI-DEV, área REQM** — rastreabilidade bidirecional entre requisitos e produtos de trabalho.
 - Normas de setores regulados (aviônica, dispositivos médicos), onde a matriz é obrigatória.
 
-**Adaptação.** As normas exigem rastrear, mas não definem prefixos, formato de ID nem a ligação com o review e com o nome do teste — isso é convenção do toolkit (`templates/id-conventions.md`).
+**Adaptação.** As normas exigem rastrear, mas não definem prefixos, formato de ID nem a ligação com o review — essa convenção vem do leanwork-sdd. O MyAiToolKit acrescenta o elo `CA → teste` com convenção de nome por stack (`templates/id-conventions.md`).
 
 ### Skills com carregamento sob demanda
 
@@ -188,7 +202,7 @@ O pipeline SDD não estima por conta própria, mas o `spike` e o campo `Estimati
 
 ## O que o MyAiToolKit acrescenta
 
-Partes desenhadas para este projeto, além da base de SDD com rastreabilidade:
+Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#leanwork-sdd--base-do-pipeline):
 
 1. **Setup multilinguagem com perfis de stack** — um roteiro de análise comum (`base-prompt.md`) e perfis por linguagem com detecção, fontes de versão, orientações por versão, comandos, testes, segurança e permissões; Rails como perfil de referência.
 2. **`config.yml` como contrato entre as skills** — os fatos do projeto (versões, comandos, convenção de teste, branch base, parâmetros de spike) num único arquivo que todas as skills leem.
@@ -198,6 +212,7 @@ Partes desenhadas para este projeto, além da base de SDD com rastreabilidade:
 6. **`code-review` avulso** — pergunta a branch base e a história, monta o roteiro a partir da configuração e classifica cada apontamento por severidade **e** por quadrante de urgência × importância.
 7. **Eixo de segurança por stack** nos dois reviews.
 8. **Convenção de nome de teste por stack** para o elo `CA → teste`.
+9. **ADRs em arquivos próprios** (`docs/sdd/architecture/adrs/ADR-XXX-*.md`) com status de ciclo de vida, e campo opcional `Estimativa` nas tarefas do plano.
 
 ---
 

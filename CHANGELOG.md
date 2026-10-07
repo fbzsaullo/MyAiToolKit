@@ -4,6 +4,9 @@ Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Chang
 
 ## [Não lançado]
 
+### Documentação
+- Crédito ao [leanwork-sdd](https://github.com/leanwork/leanwork-sdd) (Leanwork Group, MIT) como base do pipeline SDD: seção "Origem e créditos" no README, seção própria no REFERENCES.md e aviso de copyright no LICENSE.
+
 ## [0.1.0] — 2026-10-06
 
 Primeira versão.

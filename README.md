@@ -3,6 +3,8 @@
 **Kit de ferramentas open-source para desenvolver software com agentes de IA** — Claude Code em primeiro lugar, com suporte a Codex e estrutura pronta para outras IAs.
 
 > 🎓 **Projeto de faculdade.** O MyAiToolKit é um projeto acadêmico e open-source. Contribuições, críticas e sugestões são bem-vindas — veja [CONTRIBUTING.md](CONTRIBUTING.md).
+>
+> O pipeline SDD tem como base o [leanwork-sdd](https://github.com/leanwork/leanwork-sdd) (MIT) — veja [Origem e créditos](#origem-e-créditos).
 
 O kit reúne três frentes:
 
@@ -195,6 +197,24 @@ Por que skills curtas com `references/`? A `SKILL.md` diz *como conduzir*; model
 
 ---
 
+## Origem e créditos
+
+O pipeline SDD foi construído a partir do **[leanwork-sdd](https://github.com/leanwork/leanwork-sdd)** (Leanwork Group, licença MIT), que serviu de referência para a estrutura de fases e o modelo de rastreabilidade — a cadeia `ADR → RN → CA → UI → T → R`, o protótipo como especificação (SPEC-UI) e os eixos de review ligados ao plano. Os textos foram reescritos em português e reorganizados para este projeto.
+
+As contribuições deste trabalho são:
+
+- **Setup multilinguagem** — roteiro de análise comum e perfis de stack (Rails como referência, além de Node.js/TypeScript, Python, .NET, Go, Java/Kotlin, PHP e genérico), com leitura das versões reais e recomendações por versão.
+- **`config.yml` como contrato entre as skills** — versões, comandos, convenção de teste, branch base e parâmetros de spike num único arquivo.
+- **Multi-IA** — `AGENTS.md` como fonte única de contexto, `CLAUDE.md` apenas importando, permissões geradas para Claude Code e Codex, e adaptadores com contrato explícito.
+- **`/spike`** — análise de esforço a partir de cards de qualquer board, com estimativa de três pontos em que só o número do usuário é gravado.
+- **`/code-review`** — review avulso com escolha da branch base e classificação por severidade e por quadrante de urgência × importância.
+- **Segurança e testes por stack** — eixo de segurança com checklist por stack nos reviews e convenção de nome de teste para o elo `CA → teste`.
+- **ADRs em arquivos próprios** com status de ciclo de vida, e campo opcional `Estimativa` nas tarefas do plano.
+
+O detalhamento das fontes, inclusive da literatura de engenharia de software, está em [REFERENCES.md](REFERENCES.md).
+
+---
+
 ## Licença
 
-[MIT](LICENSE).
+[MIT](LICENSE). Inclui o aviso de copyright do leanwork-sdd, do qual o pipeline SDD deriva.
