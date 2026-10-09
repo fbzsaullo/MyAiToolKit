@@ -2,6 +2,11 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.3] — 2026-10-09
+
+### Novo
+- Links da listagem no `plugin.json`: `homepage` (https://myaitoolkit.fbz.dev/), `repository` (https://github.com/fbzsaullo/MyAiToolKit), `documentationUrl` (o README) e `supportUrl` (as issues do GitHub).
+
 ## [0.5.2] — 2026-10-09
 
 ### Corrigido
