@@ -81,7 +81,7 @@ Salve em `docs/sdd/prds/PRD-XXX-tema.md` (numeração e nome em `${CLAUDE_PLUGIN
 - **Gherkin no idioma do documento** — em pt-BR: `Funcionalidade`, `Cenário`, `Esquema do Cenário`, `Dado`, `Quando`, `Então`, `E`, `Mas`, `Exemplos`. Sem misturar com palavras-chave em inglês.
 - **Mermaid** para fluxos, estados e visão técnica. Cada diagrama precisa caber numa tela; se crescer, divida.
 - **Hierarquia sempre explícita** — épico → funcionalidade → história, mesmo quando tudo cabe numa funcionalidade só. Facilita cadastrar no board (Jira, GitHub Projects, Azure Boards).
-- **IDs** — `RN-01`, `RN-02`… para regras; `CA-01`, `CA-02`… para cenários. São esses IDs que o plano cita (`Implementa: RN-03`, `Valida: CA-02`) e que os testes carregam no nome. Regras: `${CLAUDE_PLUGIN_ROOT}/templates/id-conventions.md`.
+- **IDs** — `RN-01`, `RN-02`… para regras; `CA-01`, `CA-02`… para cenários. No segundo PRD do projeto em diante, a contagem continua do maior `RN` e do maior `CA` já usados nos outros PRDs (o PRD-002 não volta para `RN-01`). São esses IDs que o plano cita (`Implementa: RN-03`, `Valida: CA-02`) e que os testes carregam no nome. Regras: `${CLAUDE_PLUGIN_ROOT}/templates/id-conventions.md`.
 - **Ligação com a arquitetura** — se uma regra ou cenário existe por causa de uma decisão já registrada, cite o ADR entre parênteses: `RN-04: reserva expira em 15 minutos (ADR-003)`. Cite apenas ADRs que existem em `docs/sdd/architecture/adrs/`.
 
 ## Fica de fora do PRD

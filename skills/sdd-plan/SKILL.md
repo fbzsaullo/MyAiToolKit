@@ -106,7 +106,7 @@ A sugestão da IA nunca vai para o arquivo. Regra completa em `${CLAUDE_PLUGIN_R
 ## Regras de escrita
 
 - **Idioma** — o `language` de `docs/sdd/config.yml` (padrão `pt-BR`). Termos técnicos consagrados (migration, job, endpoint, controller) podem ficar em inglês.
-- **Numeração** — `T-01` … `T-NN`, contínua no plano inteiro; não reinicia por fase.
+- **Numeração** — `T-01` … `T-NN`, contínua no plano inteiro; não reinicia por fase. Um plano novo no mesmo projeto continua da maior `T` de todos os planos (inclusive o `PLAN-000-correcoes.md`).
 - **Status** — o campo `**Status:**` de cada tarefa aceita somente `Pendente`, `Em andamento`, `Concluído`, `Bloqueado` ou `Cancelado`, escritos por extenso e sem emoji. Toda tarefa nasce `Pendente`; `Cancelado` só entra quando o escopo muda (`sdd-change`).
 - **Tarefa estrutural** — tarefa que não coloca regra em código (projeto, infraestrutura, documentação) escreve `**Implementa:** estrutural — <motivo>` e, de preferência, cita o ADR em `Decisões base`. Campo vazio, sem `estrutural`, é tarefa sem rastro. `sdd-next` e `sdd-trace` leem esse texto literalmente.
 - **Checkbox** — `- [ ]` / `- [x]` em critérios de aceite, testes transversais, prontidão e pontos em aberto. **Nunca** no status: duas representações do mesmo estado acabam se contradizendo.

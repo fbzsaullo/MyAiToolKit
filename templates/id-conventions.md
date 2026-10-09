@@ -29,14 +29,14 @@ Todo artefato produzido pelo toolkit se conecta aos demais por meio de identific
 
 ### Regras gerais
 
-1. **Um contador por documento, sem reinício.** Se o plano tem fases, a fase 2 continua de onde a fase 1 parou (`T-08`, `T-09`…), nunca volta para `T-01`.
+1. **Um contador por projeto, sem reinício.** `RN`, `CA`, `UI` e `T` continuam a contagem do projeto inteiro: se o plano tem fases, a fase 2 continua de onde a fase 1 parou (`T-08`, `T-09`…); se o projeto ganha um segundo PRD, ele continua de onde o primeiro parou. Nunca se volta para `01` (ver "Mais de um PRD no projeto").
 2. **Zero à esquerda.** Dois dígitos no mínimo (`RN-07`, `CA-12`) para que a ordenação alfabética coincida com a numérica. `ADR` é a exceção: usa três (`ADR-004`).
 3. **Número gasto não volta.** Item removido continua ocupando o número, marcado como revogado. Reaproveitar um ID faz referências antigas apontarem para outra coisa sem ninguém perceber.
 4. **Nada de renumerar.** Precisa reorganizar? Acrescente itens novos ao final. A ordem visual importa menos que a estabilidade das referências.
 
 ### Onde o ID é único
 
-`ADR`, `RN`, `CA`, `UI` e `T` são únicos dentro do projeto (ou do par PRD/plano a que pertencem). `R` e `CR` não: cada relatório de review começa de novo em `01`, porque existe um relatório por tarefa, por round ou por branch. Por isso esses dois prefixos **sempre** levam o nome do relatório quando citados fora dele.
+`ADR`, `RN`, `CA`, `UI` e `T` são únicos no projeto inteiro — não apenas dentro do PRD, da SPEC-UI ou do plano em que nasceram. `R` e `CR` não: cada relatório de review começa de novo em `01`, porque existe um relatório por tarefa, por round ou por branch. Por isso esses dois prefixos **sempre** levam o nome do relatório quando citados fora dele.
 
 ### Particularidades de cada prefixo
 
@@ -44,11 +44,31 @@ Todo artefato produzido pelo toolkit se conecta aos demais por meio de identific
 
 **`RN-XX`** — Uma regra precisa poder ser verificada por teste. Quando provar uma regra exige vários cenários independentes, ela provavelmente esconde duas regras.
 
-**`CA-XX`** — Vive no título do cenário Gherkin, entre colchetes: `Cenário [CA-04]: pedido acima do limite é recusado`. Os colchetes fazem parte do formato. A contagem é única no PRD inteiro, não por funcionalidade.
+**`CA-XX`** — Vive no título do cenário Gherkin, entre colchetes: `Cenário [CA-04]: pedido acima do limite é recusado`. Os colchetes fazem parte do formato. A contagem é do projeto, não do PRD nem da funcionalidade.
 
 **`T-XX`** — Uma tarefa deve caber entre **30 minutos e 4 horas** de trabalho, o equivalente a um commit ou a um PR curto. Passou disso, divida; ficou abaixo de uns 10 minutos, junte com a vizinha. Mais de três critérios de aceite costuma indicar tarefa grande demais. Essa faixa é o único limite de tamanho do toolkit — o `sdd-plan` e os exemplos de tarefa usam ela como régua. Ela serve para **cortar** o trabalho, não para prever prazo: o plano guarda `Complexidade` (`Baixa` / `Média` / `Alta`) e, se o usuário quiser, uma `Estimativa` que ele mesmo informa (ver "Horas: quem decide é o usuário").
 
-**`UI-XX`** — Contador único na SPEC-UI. O estado vem depois de um ponto (`UI-03.carregando`, `UI-03.erro`), o que permite à tarefa declarar `Telas: UI-03 (default, erro)` e ao review conferir estado por estado. Tela abandonada mantém o número, marcada como removida.
+**`UI-XX`** — Contador do projeto: a segunda SPEC-UI continua de onde a primeira parou. O estado vem depois de um ponto (`UI-03.carregando`, `UI-03.erro`), o que permite à tarefa declarar `Telas: UI-03 (default, erro)` e ao review conferir estado por estado. Tela abandonada mantém o número, marcada como removida.
+
+### Mais de um PRD no projeto
+
+Um projeto cresce por PRDs: o PRD-001 entrega a primeira versão, o PRD-002 a funcionalidade seguinte, cada um com seu plano. A numeração **não recomeça** em cada um:
+
+| Documento novo | Começa em |
+|----------------|-----------|
+| `PRD-002` | a `RN` e o `CA` seguintes aos maiores já usados em qualquer PRD do projeto |
+| `SPEC-UI-002` | a `UI` seguinte à maior já usada em qualquer SPEC-UI |
+| `PLAN-002` | a `T` seguinte à maior já usada em qualquer plano, inclusive o `PLAN-000-correcoes.md` |
+
+Exemplo: o PRD-001 terminou em `RN-16` e `CA-27`, e o PLAN-001 em `T-26`. O PRD-002 começa em `RN-17` e `CA-28`; o PLAN-002, em `T-27`.
+
+**Por quê.** O teste carrega só o `CA-XX` no nome, sem o PRD; o `sdd-trace` e o review acham o teste por busca textual. Dois `CA-03` no mesmo projeto fariam um teste parecer provar o cenário errado, sem ninguém perceber. O mesmo vale para `T-XX` nas mensagens de commit e nos nomes de branch.
+
+**Como achar o próximo número.** Procure o maior ID de cada prefixo em `docs/sdd/prds/`, `docs/sdd/prototype/` e `docs/sdd/plans/`, contando os revogados e os cancelados — número gasto não volta.
+
+**Regra revogada por outro PRD.** Quando o PRD novo substitui uma regra de um PRD anterior, o anterior risca a regra e aponta para a nova (`~~RN-04~~ … ver RN-17 do PRD-002`) e registra a mudança na sua seção **Revisões** — a mesma regra de "Revogando regras e telas".
+
+**Projeto que já reiniciou a contagem.** Não renumere (regra 4). Daqui em diante, continue do maior número do projeto, e cite os IDs repetidos sempre com o documento: `CA-03 (PRD-002)`. O `sdd-trace` aponta a repetição.
 
 **`R-XX`** — Recomeça em `R-01` em cada `REVIEW-T-XX-*.md`, inclusive no segundo round da mesma tarefa. A ligação entre rounds é feita pela seção "Round anterior" do relatório, nunca pela coincidência de números. Fora do relatório, cite assim: `R-02 (REVIEW-T-06-2026-10-12)`; para vários do mesmo arquivo, `R-01, R-04 (REVIEW-T-06-2026-10-12)`. Escrever apenas "o R-02 da T-06" não basta — a T-06 pode ter mais de um round.
 
@@ -69,7 +89,7 @@ O review só cobra ADRs `Aceito`. Para o `sdd-trace`, uma tarefa apoiada em ADR 
 
 ## Status de uma tarefa
 
-O campo `**Status:**` dentro de cada bloco `#### T-XX` aceita quatro valores, e só eles. O idioma acompanha o `language` de `docs/sdd/config.yml` (padrão `pt-BR`) e não muda no meio de um plano:
+O campo `**Status:**` dentro de cada bloco `#### T-XX` aceita cinco valores, e só eles. O idioma acompanha o `language` de `docs/sdd/config.yml` (padrão `pt-BR`) e não muda no meio de um plano:
 
 | pt-BR | en | Quando usar |
 |-------|----|-------------|

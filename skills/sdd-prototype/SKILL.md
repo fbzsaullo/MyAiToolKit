@@ -107,7 +107,7 @@ Use `references/spec-ui-template.md` e salve em `docs/sdd/prototype/SPEC-UI-XXX-
 
 ## IDs
 
-`UI-XX` segue `${CLAUDE_PLUGIN_ROOT}/templates/id-conventions.md`: contador único na SPEC-UI, dois dígitos, sem reúso (tela removida fica marcada). Estados com sufixo: `UI-03.vazio`, `UI-03.erro`, `UI-03.carregando` — é assim que o plano e o review apontam um estado específico.
+`UI-XX` segue `${CLAUDE_PLUGIN_ROOT}/templates/id-conventions.md`: contador do projeto (a segunda SPEC-UI continua da maior `UI` da primeira), dois dígitos, sem reúso (tela removida fica marcada). Estados com sufixo: `UI-03.vazio`, `UI-03.erro`, `UI-03.carregando` — é assim que o plano e o review apontam um estado específico.
 
 ## Como as outras fases usam a SPEC-UI
 

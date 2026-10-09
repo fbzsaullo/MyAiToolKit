@@ -2,6 +2,16 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.2] — 2026-10-09
+
+### Corrigido
+- `sdd-review`: a branch base do diff local vinha de `git.default_base_branch`, chave que não existe; agora vem de `code_review.default_base_branch`, a mesma do `/code-review`.
+- Adaptador do Claude Code: o texto dizia que o `allowed-tools` limita a edição à pasta do artefato. Pela documentação, o campo **pré-aprova** as ferramentas listadas e não restringe as demais (e a liberação acaba na próxima mensagem do usuário). O README do adaptador agora explica o que de fato garante cada limite.
+- `templates/id-conventions.md`: dizia "quatro valores" de status de tarefa; são cinco desde o `Cancelado`.
+
+### Convenções
+- **Numeração entre PRDs:** `RN`, `CA`, `UI` e `T` continuam a contagem do projeto inteiro — o PRD-002 começa depois do maior `RN`/`CA` do PRD-001, e o PLAN-002 depois da maior `T`. Seção nova "Mais de um PRD no projeto" em `id-conventions.md`; `sdd-prd`, `sdd-plan`, `sdd-prototype` e `sdd-bug` seguem a regra, e o `sdd-trace` aponta ID repetido entre documentos.
+
 ## [0.3.1] — 2026-10-07
 
 ### Novo

@@ -35,7 +35,7 @@ Um PR que entrega várias tarefas gera **um relatório por tarefa**, mais um res
 **Diff**, em ordem de preferência:
 1. caminho de um patch fornecido pelo usuário;
 2. branch ou PR informado (`gh pr diff <n>` quando o `gh` estiver disponível);
-3. alterações locais: `git diff <base>...HEAD`, com a branch base de `docs/sdd/config.yml` (`git.default_base_branch`) — confirme com o usuário se houver dúvida;
+3. alterações locais: `git diff <base>...HEAD`, com a branch base de `docs/sdd/config.yml` (`code_review.default_base_branch`) — confirme com o usuário se houver dúvida;
 4. nada disso: pergunte como acessar o código (colar o diff, caminho, branch para comparar).
 
 Diff vazio ou inacessível: não gere relatório.

@@ -52,7 +52,12 @@ As skills de fase (`sdd-architect`, `sdd-prd`, `sdd-prototype`, `sdd-plan`, `sdd
 
 ## Permissões pré-aprovadas
 
-Cada skill declara `allowed-tools` com leitura (`Read`, `Glob`, `Grep`) e edição **apenas** da pasta do artefato que ela produz (ex.: `Edit(docs/sdd/prds/**)` no `sdd-prd`). Comandos de shell **não** são pré-aprovados em nenhuma skill: rodar testes, git ou ferramentas pede confirmação, a menos que o `.claude/settings.json` do projeto (gerado pelo `sdd-setup`) os libere.
+Cada skill declara `allowed-tools` com leitura (`Read`, `Glob`, `Grep`) e edição da pasta do artefato que ela produz (ex.: `Edit(docs/sdd/prds/**)` no `sdd-prd`). Comandos de shell **não** são pré-aprovados em nenhuma skill: rodar testes, git ou ferramentas pede confirmação, a menos que o `.claude/settings.json` do projeto (gerado pelo `sdd-setup`) os libere.
+
+**`allowed-tools` pré-aprova; não restringe.** Pela documentação do Claude Code, o campo libera as ferramentas listadas sem pedir confirmação, mas todas as outras continuam disponíveis, sujeitas às permissões do projeto. A liberação também acaba na próxima mensagem do usuário: numa skill que pergunta algo no meio do fluxo, o que vem depois da resposta volta a seguir as permissões normais. Na prática:
+
+- uma edição fora da pasta do artefato **não é impedida** pelo frontmatter — ela pede confirmação. Quem garante que as skills só escrevem onde devem é o texto de cada skill, e quem garante que o agente não commita é a regra `ask` de `git commit` que o `sdd-setup` grava no `.claude/settings.json`;
+- para tirar uma ferramenta de uso de verdade, o Claude Code oferece o campo `disallowed-tools` e as regras `deny` das permissões. O toolkit ainda não usa nenhum dos dois nas skills.
 
 ## Contexto do projeto
 

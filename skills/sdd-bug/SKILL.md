@@ -55,7 +55,7 @@ Use `git log` e `git blame` (só leitura) quando ajudarem a datar o defeito: um 
 Uma tarefa só, no formato de `${CLAUDE_PLUGIN_ROOT}/skills/sdd-plan/references/plan-template.md`:
 
 - **Onde:** no plano do PRD atingido, numa fase `### Fase N — Correções` (crie no fim se não existir); sem PRD, em `docs/sdd/plans/PLAN-000-correcoes.md`, um plano permanente só de correções (crie a partir do modelo, com cabeçalho mínimo, se não existir).
-- **Numeração:** a próxima `T-XX` livre daquele plano.
+- **Numeração:** a próxima `T-XX` livre do projeto (a maior de todos os planos, mais um).
 - **Implementa / Valida:** a `RN` e o `CA` do Passo 2. Sem PRD: `Implementa: estrutural — correção do BUG-<CHAVE>`.
 - **Critério de aceite:** o teste de regressão **falha antes** da correção e passa depois; os testes existentes continuam verdes.
 - **Testes a escrever:** o teste de regressão, com o nome definido no Passo 2.

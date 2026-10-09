@@ -102,6 +102,7 @@ Para cada item, diga onde está e qual o risco:
 - **Bloqueante aberto em tarefa `Concluído`** — **contradição grave** entre o declarado e o verificado.
 - **Status fora do vocabulário** — tarefa invisível para `sdd-next` e para esta skill; mostre a grafia.
 - **Status diferente do histórico** — registro de execução não confiável.
+- **ID repetido entre documentos** — o mesmo `RN`, `CA`, `UI` ou `T` definido em dois PRDs, SPEC-UIs ou planos do projeto → um teste ou commit pode estar provando o item errado. Não proponha renumerar; recomende citar com o documento (`CA-03 (PRD-002)`) e continuar a contagem do maior número (`templates/id-conventions.md`, "Mais de um PRD no projeto").
 
 Com SPEC-UI, também:
 
