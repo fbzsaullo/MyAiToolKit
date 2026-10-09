@@ -90,7 +90,7 @@ O `/sdd-setup` segue um **roteiro de análise comum** ([`base-prompt.md`](skills
 2. lê as **versões reais** em lockfiles e arquivos de versão;
 3. carrega o perfil da stack — ou o genérico, se não houver;
 4. formula **recomendações conforme as versões** (recursos disponíveis e não usados, padrões atrasados, suporte, ferramentas ausentes);
-5. pergunta, numa única rodada, o que a análise não respondeu (quais IAs, idioma, permissões) e o **padrão das mensagens de commit**: Conventional Commits, ID da tarefa primeiro ou um padrão que você escreve;
+5. pergunta, numa única rodada, o que a análise não respondeu (quais IAs, idioma, permissões), o **padrão das mensagens de commit** (Conventional Commits, ID da tarefa primeiro ou um padrão que você escreve) e se a **revisão cruzada** dos reviews fica desligada, automática ou sempre ligada;
 6. gera os arquivos, sempre mostrando o diff e sem sobrescrever o que foi escrito por pessoas.
 
 | Stack | Perfil |
@@ -137,6 +137,24 @@ Cada apontamento recebe severidade (Bloqueante / Importante / Sugestão) e um qu
 
 O relatório vem agrupado de Q1 a Q4, com a cobertura dos critérios de aceite da história, o resultado das ferramentas da stack (rodadas só nos arquivos do diff e com sua permissão) e, quando o código é de um colega, comentários prontos para colar no PR.
 
+## Revisão cruzada — opcional, nos dois reviews
+
+Com `review.cross_check` ligado no `config.yml` (ou a palavra `cruzada` na chamada), o `/sdd-review` e o `/code-review` entregam os apontamentos graves a um **segundo agente, independente**, que tenta derrubá-los lendo o código — sem ver o raciocínio de quem apontou.
+
+- **Confirmado:** fica.
+- **Refutado com evidência** (`arquivo:linha`): um `Importante` sai do relatório e vai para "Candidatos descartados"; um `Bloqueante` ou `Q1` **nunca sai sozinho** — vira uma pergunta para você.
+- **Inconclusivo:** fica como está.
+
+Não é um debate: os agentes não conversam entre si, há uma única verificação por review, sem réplica, e o verificador só lê. A pesquisa sobre agentes que discutem entre si mostra que rodadas livres raramente superam um agente bem orientado; o que melhora a precisão é verificar cada apontamento de forma independente ([REFERENCES.md](REFERENCES.md)).
+
+| `review.cross_check` | Quando verifica | Custo |
+| --- | --- | --- |
+| `never` (padrão) | nunca | — |
+| `auto` | só quando há `Bloqueante` ou `Q1` | ~1,5–2× nos reviews verificados |
+| `always` | todo review | ~1,5–2× |
+
+No Claude Code o verificador é o agente do plugin `review-verifier`; no Codex, um subagente. Sem suporte a subagentes, o review avisa e segue simples. Regras em [`templates/cross-check.md`](templates/cross-check.md).
+
 ---
 
 ## Instalação
@@ -177,7 +195,8 @@ MyAiToolKit/
 │   ├── sdd-setup/         roteiro multilinguagem, modelos de AGENTS.md/CLAUDE.md, permissões
 │   ├── spike/
 │   └── code-review/
-├── templates/             convenções compartilhadas: IDs, pastas, leitura de cards, detecção de stack
+├── agents/                review-verifier.md — verificador da revisão cruzada (Claude Code)
+├── templates/             convenções compartilhadas: IDs, pastas, leitura de cards, detecção de stack, revisão cruzada
 ├── stacks/                perfis por linguagem (rails/ é o completo; _generic/ é o fallback)
 ├── adapters/              claude-code/, codex/ e o contrato para novas IAs
 ├── scripts/check.sh       verificações de consistência (rodam no CI)
@@ -198,6 +217,7 @@ Por que skills curtas com `references/`? A `SKILL.md` diz *como conduzir*; model
 - **Lacuna declarada vale mais que lacuna preenchida.** Nenhuma skill inventa para fechar uma tabela; tudo o que é deduzido aparece como premissa.
 - **Nunca destrutivo.** Arquivos escritos por pessoas não são sobrescritos; o diff é sempre mostrado antes de gravar.
 - **A IA sugere, você decide.** Estimativas, migrations e permissões sensíveis passam pela sua decisão.
+- **Review que se questiona, sem debate.** Se você ligar a revisão cruzada, um verificador independente tenta derrubar cada apontamento grave; um Bloqueante só cai com a sua decisão.
 - **O kit nunca commita.** Quando o review aprova uma tarefa, você recebe a mensagem de commit pronta, em texto, no padrão escolhido no setup; para qualquer outra mudança, há o `/commit-message`. O commit é seu, e o hash entra no plano no review seguinte.
 - **Português por padrão.** Skills e artefatos em PT-BR; o idioma dos artefatos pode mudar no `config.yml`.
 - **Fontes na mesa.** [REFERENCES.md](REFERENCES.md) credita a literatura e registra onde o toolkit diverge dela de propósito.
@@ -215,6 +235,7 @@ As contribuições deste trabalho são:
 - **Multi-IA** — `AGENTS.md` como fonte única de contexto, `CLAUDE.md` apenas importando, permissões geradas para Claude Code e Codex, e adaptadores com contrato explícito.
 - **`/spike`** — análise de esforço a partir de cards de qualquer board, com estimativa de três pontos em que só o número do usuário é gravado.
 - **`/code-review`** — review avulso com escolha da branch base e classificação por severidade e por quadrante de urgência × importância.
+- **Revisão cruzada** — verificação independente dos apontamentos graves nos dois reviews, com regra assimétrica (Bloqueante só cai com decisão do usuário) e travas que impedem a troca infinita entre agentes.
 - **Segurança e testes por stack** — eixo de segurança com checklist por stack nos reviews e convenção de nome de teste para o elo `CA → teste`.
 - **ADRs em arquivos próprios** com status de ciclo de vida, e campo opcional `Estimativa` nas tarefas do plano.
 

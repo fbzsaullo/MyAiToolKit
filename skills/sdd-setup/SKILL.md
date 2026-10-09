@@ -1,6 +1,6 @@
 ---
 name: sdd-setup
-description: Analisa o repositório (uma ou várias linguagens, inclusive monorepo), lê as versões reais de cada stack, carrega o perfil da stack (Rails é a referência; há perfis para Node, Python, .NET, Go, Java e PHP e um genérico para o resto), formula recomendações conforme as versões e gera a configuração do projeto para os agentes — docs/sdd/config.yml, AGENTS.md (contexto canônico), CLAUDE.md, permissões do Claude Code (.claude/settings.json) e do Codex (.codex/), e o relatório docs/sdd/stack-report.md. Pergunta também o padrão das mensagens de commit (o kit nunca commita, só entrega a mensagem pronta em texto). Modos — completo, audit (somente leitura), module <nome>, permissions, refresh. Nunca sobrescreve conteúdo escrito por pessoas e sempre mostra o diff antes de gravar. Use apenas quando o usuário chamar /sdd-setup (ou $sdd-setup) ou pedir explicitamente para configurar o toolkit, gerar AGENTS.md/CLAUDE.md, analisar a stack ou configurar permissões.
+description: Analisa o repositório (uma ou várias linguagens, inclusive monorepo), lê as versões reais de cada stack, carrega o perfil da stack (Rails é a referência; há perfis para Node, Python, .NET, Go, Java e PHP e um genérico para o resto), formula recomendações conforme as versões e gera a configuração do projeto para os agentes — docs/sdd/config.yml, AGENTS.md (contexto canônico), CLAUDE.md, permissões do Claude Code (.claude/settings.json) e do Codex (.codex/), e o relatório docs/sdd/stack-report.md. Pergunta também o padrão das mensagens de commit (o kit nunca commita, só entrega a mensagem pronta em texto) e se a revisão cruzada dos reviews fica ligada (um verificador independente confere os apontamentos graves). Modos — completo, audit (somente leitura), module <nome>, permissions, refresh. Nunca sobrescreve conteúdo escrito por pessoas e sempre mostra o diff antes de gravar. Use apenas quando o usuário chamar /sdd-setup (ou $sdd-setup) ou pedir explicitamente para configurar o toolkit, gerar AGENTS.md/CLAUDE.md, analisar a stack ou configurar permissões.
 argument-hint: "[audit | module <nome> | permissions | refresh — vazio = setup completo]"
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep
@@ -58,8 +58,9 @@ Junte numa só rodada o que a análise não resolveu. Se o ambiente tem uma ferr
 > 3. **Padrão das mensagens de commit:** Conventional Commits, ID da tarefa primeiro, ou outro que você escreve? *(detalhes abaixo)*
 > 4. **Migrations:** com confirmação a cada uma, ou bloqueadas (só manualmente)?
 > 5. **Branch base para code review:** detectei `<main|master|develop>` — confirma?
+> 6. **Revisão cruzada nos reviews:** desligada, automática ou sempre? *(custo e detalhes abaixo)*
 
-Inclua só as perguntas que a análise não respondeu sozinha. A exceção é a 3: ela é feita sempre que o `config.yml` ainda não tem `git.commit`, mesmo que a análise tenha achado um padrão (nesse caso, a opção correspondente vem marcada como recomendada). Em monorepo, acrescente: um `docs/sdd/` por sistema ou um único na raiz?
+Inclua só as perguntas que a análise não respondeu sozinha. As exceções são a 3 e a 6: cada uma é feita sempre que o `config.yml` ainda não tem a chave correspondente (`git.commit`, `review.cross_check`), mesmo que a análise tenha achado um padrão de commit (nesse caso, a opção correspondente vem marcada como recomendada). Em monorepo, acrescente: um `docs/sdd/` por sistema ou um único na raiz?
 
 #### Padrão das mensagens de commit
 
@@ -76,6 +77,24 @@ O kit não commita (ver Compromissos), então a pergunta é só sobre **o format
 - **Idioma:** a descrição segue `project.language`; tipos, escopos e IDs não se traduzem.
 - **Onde fica:** `docs/sdd/config.yml` → `git.commit` (lido por `commit-message`, `sdd-review` e `code-review`; regras de formato em `${CLAUDE_PLUGIN_ROOT}/templates/commit-message.md`) e uma linha em Convenções do `AGENTS.md`, para que qualquer IA siga o mesmo padrão.
 
+#### Revisão cruzada nos reviews
+
+Pergunta sobre o `/sdd-review` e o `/code-review`: depois de avaliar, eles podem entregar os apontamentos graves a um **segundo agente, independente**, que tenta derrubá-los lendo o código — sem ver o raciocínio de quem apontou. Apontamento refutado com evidência sai do relatório; `Bloqueante` ou `Q1` refutado nunca sai sozinho: vira uma pergunta ao usuário. Os agentes não conversam entre si e há uma única verificação por review. Regras completas em `${CLAUDE_PLUGIN_ROOT}/templates/cross-check.md`.
+
+Ofereça três opções e a resposta livre:
+
+| Opção | Valor gravado | Efeito |
+| --- | --- | --- |
+| **Desligada** (recomendada) | `never` | Review como sempre foi |
+| **Automática** | `auto` | Verifica só quando o review achou um `Bloqueante` ou um `Q1` |
+| **Sempre** | `always` | Verifica os `Bloqueante` e `Importante` de todo review |
+| **Outro** | — | O usuário descreve; converta para um dos três valores e confirme antes de gravar |
+
+- **Diga o custo na própria pergunta:** um review com verificação gasta cerca de 1,5 a 2 vezes os tokens de um review simples.
+- **Diga que dá para mudar a cada chamada:** `/sdd-review T-04 cruzada` liga naquele review; `simples` desliga.
+- **Ambiente:** a verificação precisa que a IA abra um agente novo (no Claude Code, o agente do plugin `review-verifier`; no Codex, um subagente). Sem isso, o review avisa "indisponível" e segue simples — a escolha continua valendo para quando houver suporte.
+- **Onde fica:** `docs/sdd/config.yml` → `review.cross_check`.
+
 ### 3. Detectar divergências (quando já existe configuração)
 
 Compare o que está documentado com o que a análise encontrou e mostre **antes** de propor mudanças:
@@ -90,6 +109,7 @@ Compare o que está documentado com o que a análise encontrou e mostre **antes*
 | Link morto | índice aponta para PRD que não existe | Média |
 | Padrão novo não documentado | três reviews citam o mesmo padrão | Média |
 | Padrão de commit ausente ou contrariado | `config.yml` sem `git.commit`, ou os commits recentes seguem outro formato | Média — pergunte (passo 2) |
+| Revisão cruzada não configurada | `config.yml` sem `review.cross_check` (setup anterior à 0.4.0) | Baixa — pergunte (passo 2, pergunta 6) |
 | Commit liberado ao agente | configuração antiga com `permissions.claude.git_commit: allow` ou `Bash(git commit *)` em `allow` | Média — o kit não commita mais; proponha `ask` e deixe a decisão com o time |
 | Módulo novo sem contexto | engine criada depois do último setup | Baixa |
 | Permissão para comando que sumiu | `allow` com script removido | Baixa |
@@ -132,6 +152,7 @@ Mantenha a ordem canônica de seções (Resumo, Stack, Comandos, Convenções, R
 - stacks e versões encontradas, com a origem de cada versão;
 - recomendações principais do `stack-report.md` (até 5);
 - padrão de commit escolhido, com um exemplo de mensagem;
+- revisão cruzada escolhida (`never`, `auto` ou `always`);
 - divergências encontradas e o que foi feito com cada uma;
 - lacunas deixadas como `TODO` e o motivo;
 - módulos detectados que não receberam contexto (e por quê);
@@ -192,3 +213,4 @@ Sempre convite, nunca etapa obrigatória.
 - `${CLAUDE_PLUGIN_ROOT}/stacks/README.md` — contrato dos perfis de stack
 - `${CLAUDE_PLUGIN_ROOT}/stacks/rails/profile.md` — perfil de referência
 - `${CLAUDE_PLUGIN_ROOT}/templates/stack-detection.md` — cascata de detecção usada pelas demais skills
+- `${CLAUDE_PLUGIN_ROOT}/templates/cross-check.md` — revisão cruzada (pergunta 6)

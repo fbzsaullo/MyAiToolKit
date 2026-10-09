@@ -45,6 +45,7 @@ Observações:
 - O Codex ignora `allowed-tools`, `argument-hint` e `disable-model-invocation`. As skills `sdd-execute` e `sdd-setup` dizem no próprio texto que só devem rodar a pedido explícito.
 - `$ARGUMENTS` não é substituído: as skills usam a sua mensagem como entrada.
 - O comando nativo `/review` do Codex continua existindo; o review do toolkit é o `$code-review`.
+- **Revisão cruzada** (`review.cross_check` ou a palavra `cruzada`): o `$sdd-review` e o `$code-review` pedem ao Codex um subagente só de leitura e lhe entregam o pedido de `templates/cross-check.md`. O subagente herda a sandbox da sessão. A pasta `agents/` do toolkit é do Claude Code e não é instalada. Se a sua versão do Codex não abrir subagentes, o review avisa "indisponível neste ambiente" e segue simples — confira `codex --version` e a documentação de subagentes do Codex.
 
 ## Contexto e permissões
 

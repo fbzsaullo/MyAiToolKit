@@ -17,6 +17,7 @@ Salvo pela skill `code-review` em `docs/sdd/code-reviews/CR-<branch>-AAAA-MM-DD.
 - **Tamanho:** [ex.: 12 commits · 18 arquivos · +642 −87]
 - **Data:** AAAA-MM-DD
 - **Veredito:** [⛔ Não pronto para merge / ⚠️ Pronto com ajustes / ✅ Pronto]
+- **Revisão cruzada:** [desligada / pulada (modo automático: sem Bloqueante nem Q1) / feita — N verificados (C confirmados, D descartados, E em disputa, I inconclusivos) / incompleta — motivo / indisponível neste ambiente]
 
 ---
 
@@ -107,6 +108,21 @@ Salvo pela skill `code-review` em `docs/sdd/code-reviews/CR-<branch>-AAAA-MM-DD.
 | Juros a partir da 7ª parcela | não encontrado | — | ❌ ver o CR correspondente (sempre Q1) |
 
 **Escopo fora da história:** [ex.: alteração no layout do carrinho não prevista no card — pedir justificativa (CR-06)]
+
+---
+
+## Verificação cruzada *(omitir se desligada, pulada ou indisponível)*
+
+| Apontamento | Severidade · quadrante (antes → depois) | Verificador | Evidência do verificador | Decisão |
+| --- | --- | --- | --- | --- |
+| CR-01 | Bloqueante · Q1 → Bloqueante · Q1 | Confirmado | `app/models/pedido.rb:42` — parâmetro interpolado | mantido |
+| CR-02 | Bloqueante · Q1 → Bloqueante · Q1 | Refutado | `spec/system/checkout_spec.rb:30` cobre o caso | em disputa — decidido pelo usuário: manter no Q1 |
+
+### Candidatos descartados
+
+| Candidato | Severidade proposta | Contra-evidência |
+| --- | --- | --- |
+| Falta autorização em `PedidosController#show` | Importante | `app/controllers/application_controller.rb:6` — `before_action :authorize_owner!` |
 
 ---
 

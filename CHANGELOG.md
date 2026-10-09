@@ -2,6 +2,21 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.4.0] — 2026-10-09
+
+Os reviews podem se questionar — sem virar debate.
+
+### Novo
+- **Revisão cruzada** no `/sdd-review` e no `/code-review`, opcional: um verificador independente, só de leitura, recebe os apontamentos `Bloqueante`, `Importante` e `Q1` (sem o raciocínio de quem apontou) e responde `Confirmado`, `Refutado` (com contra-evidência em `arquivo:linha`) ou `Inconclusivo`. `Importante` refutado sai do relatório; `Bloqueante` ou `Q1` refutado fica **em disputa** e vai para o usuário numa pergunta só. Uma verificação por review, sem réplica e sem segunda rodada. Regras em `templates/cross-check.md`.
+- **Agente do plugin** `agents/review-verifier.md` (`my-ai-toolkit:review-verifier` no Claude Code): `Read`, `Grep` e `Glob`, `maxTurns: 12`. No Codex, a skill pede um subagente com o mesmo pedido. Sem suporte a subagentes, o review avisa "indisponível" e segue simples — nunca simula a verificação.
+- **`/sdd-setup` pergunta** se a revisão cruzada fica desligada, automática (só com `Bloqueante`/`Q1`) ou sempre ligada, com o custo na pergunta. Chave `review.cross_check: never | auto | always` no `config.yml` (padrão `never`); na chamada, `cruzada` e `simples` sobrepõem o valor.
+- Relatórios com o campo `Revisão cruzada:` e as seções "Verificação cruzada" e "Candidatos descartados".
+
+### Convenções
+- `adapters/README.md`: recurso opcional pode depender de uma capacidade do ambiente, desde que o pedido seja compartilhado entre as IAs e a skill siga no modo normal quando a capacidade faltar.
+- `scripts/check.sh` valida o frontmatter dos agentes em `agents/`.
+- `REFERENCES.md`: fontes da revisão cruzada e a escolha "verificação, não debate".
+
 ## [0.3.2] — 2026-10-09
 
 ### Corrigido

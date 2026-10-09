@@ -139,6 +139,14 @@ A cadeia `ADR → RN → CA → UI → T → R → teste` é uma **matriz de ras
 - **Eixo de segurança** — **[OWASP Top 10](https://owasp.org/Top10/)** e [CWE](https://cwe.mitre.org) (injeção, XSS, controle de acesso, exposição de dados); dados pessoais em log — LGPD art. 6º e [CWE-532](https://cwe.mitre.org/data/definitions/532.html). Em Rails: [Guia de Segurança do Rails](https://guides.rubyonrails.org/security.html), [OWASP Ruby on Rails Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Cheat_Sheet.html) e [Brakeman](https://brakemanscanner.org). **Adaptação**: checklist aplicado só ao diff, explicitamente não é modelagem de ameaças.
 - Diff a partir do ponto de separação (`base...alvo`) — [documentação do git diff](https://git-scm.com/docs/git-diff).
 
+### Revisão cruzada (`templates/cross-check.md`)
+
+- **Debate entre agentes** — Du et al., *Improving Factuality and Reasoning in Language Models through Multiagent Debate* (2023): ganhos com mais agentes e rodadas, saturando cedo. Liang et al., *Encouraging Divergent Thinking in Large Language Models through Multi-Agent Debate* (EMNLP 2024): nomeia a "degeneração do pensamento" de um único modelo e precisa de parada antecipada e de um juiz.
+- **Os limites do debate** — Smit et al., *Should we be going MAD? A Look at Multi-Agent Debate Strategies for LLMs* (ICML 2024): o debate não supera de forma consistente amostragem com voto e custa mais. *Debate or Vote* (NeurIPS 2025, arXiv 2508.17536): o voto explica a maior parte do ganho; o debate sozinho não melhora a resposta esperada. Huang et al., *Large Language Models Cannot Self-Correct Reasoning Yet* (ICLR 2024): autocorreção sem informação nova não ajuda.
+- **Verificação independente** — Dhuliawala et al., *Chain-of-Verification Reduces Hallucination in Large Language Models* (2023): responder às verificações sem ver o rascunho evita que ele contamine a checagem. É a base do "o verificador não recebe o raciocínio de quem apontou".
+- **Encontrar e verificar, na prática** — o [Code Review da Anthropic](https://claude.com/blog/code-review) (2026: buscadores em paralelo e uma etapa de verificação contra o comportamento real do código), o plugin [`code-review` do Claude Code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/README.md) (uma nota por apontamento e corte por confiança) e o [uReview da Uber](https://www.uber.com/en-US/blog/ureview/) (gerador e avaliador separados). Os números de precisão dessas fontes são do próprio fornecedor e medidos de formas diferentes.
+- **Adaptação:** uma única verificação por review, sem réplica, e regra assimétrica — `Importante` refutado com contra-evidência sai; `Bloqueante`/`Q1` refutado vai para o usuário. O limite de 20 candidatos, os 12 passos do verificador e a faixa de custo de 1,5–2× são **heurísticas de prática**.
+
 ---
 
 ## `sdd-setup` — contexto e permissões
@@ -197,6 +205,10 @@ O "escolha 2 de 3" foi revisto pelo próprio **Eric Brewer** em *[CAP Twelve Yea
 
 Achar `CA-01` no nome de um teste prova que o cenário foi **citado** — não que o teste existe de verdade, roda e passa. Por isso o `sdd-review` verifica o conteúdo do teste e não só o nome.
 
+### Verificação, não debate
+
+A ideia intuitiva de "agentes que se questionam até concordar" não foi adotada. A literatura recente mostra que rodadas de debate livre raramente superam um agente bem orientado, pioram com o número de rodadas (os agentes passam a concordar uns com os outros) e custam várias vezes mais. A revisão cruzada usa o desenho que funciona em produção: **um** verificador independente por review, que só julga os apontamentos recebidos. A discordância que sobra não é resolvida entre agentes — vai para o usuário.
+
 ### Estimativa existe, mas não é da IA
 
 O pipeline SDD não estima por conta própria, mas o `spike` e o campo `Estimativa` do plano registram horas. A divergência em relação à IA "que estima sozinha" é intencional: a IA sugere com premissas, e somente o número informado pelo usuário é gravado.
@@ -218,6 +230,7 @@ Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#le
 9. **ADRs em arquivos próprios** (`docs/sdd/architecture/adrs/ADR-XXX-*.md`) com status de ciclo de vida, e campo opcional `Estimativa` nas tarefas do plano.
 10. **O kit nunca commita nem abre PR** — padrão de mensagem escolhido no setup, `/commit-message` para qualquer diff, mensagem da tarefa entregue só quando o review aprova, hash preenchido no histórico a partir do `git log` e `/pr-description` montando o texto do PR com a rastreabilidade e os reviews.
 11. **Gestão de mudança no pipeline** — `sdd-change` (impacto por ID, revisão registrada, tarefas canceladas em vez de apagadas), `sdd-bug` (bug como tarefa com teste de regressão ligado ao cenário descumprido) e `sdd-adr` (decisão avulsa com ciclo de vida), mais o status `Cancelado` e a marca `estrutural` nas tarefas.
+12. **Revisão cruzada opcional** nos dois reviews — verificador independente, só de leitura, com uma chamada por review, regra assimétrica para Bloqueantes e decisão final do usuário (`templates/cross-check.md`, `agents/review-verifier.md`).
 
 ---
 
@@ -235,6 +248,7 @@ Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#le
 | **RTO / RPO** | Recuperação de desastre citada sem as métricas que a definem |
 | **eMAG e LBI (Lei 13.146/2015)** | Acessibilidade cita WCAG, não a norma brasileira |
 | **Calibração de estimativas com histórico** | O `spike` poderia comparar estimativa informada × tempo real das tarefas concluídas |
+| **Revisão cruzada sem medição** | Registrar quantos apontamentos o verificador confirma, descarta e deixa em disputa, para calibrar o modo `auto` com dados do próprio projeto |
 | **Perfis completos para outras stacks** | Hoje só Rails tem checklists, heurísticas e exemplos próprios |
 
 ---
@@ -285,17 +299,23 @@ Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#le
 - Akhawe e Felt — *Alice in Warningland* (USENIX Security, 2013)
 - Eric Brewer — *CAP Twelve Years Later* (2012)
 - Melvin Conway — *How Do Committees Invent?* (1968)
+- *Debate or Vote: Which Yields Better Decisions in Multi-Agent Large Language Models?* (NeurIPS 2025)
+- Dhuliawala et al. — *Chain-of-Verification Reduces Hallucination in Large Language Models* (2023)
+- Du et al. — *Improving Factuality and Reasoning in Language Models through Multiagent Debate* (2023)
 - Roy Fielding — *Architectural Styles and the Design of Network-based Software Architectures* (2000)
 - Garcia-Molina e Salem — *Sagas* (SIGMOD, 1987)
 - David Harel — *Statecharts: A Visual Formalism for Complex Systems* (1987)
+- Huang et al. — *Large Language Models Cannot Self-Correct Reasoning Yet* (ICLR 2024)
 - Kahneman e Tversky — *Intuitive Prediction: Biases and Corrective Procedures* (1979)
 - Kung e Robinson — *On Optimistic Methods for Concurrency Control* (1981)
 - Lewis e Fowler — *Microservices* (2014)
+- Liang et al. — *Encouraging Divergent Thinking in Large Language Models through Multi-Agent Debate* (EMNLP 2024)
 - Malcolm, Roseboom, Clark e Fazar — *Application of a Technique for R&D Program Evaluation* (Operations Research, 1959)
 - Dan McKinley — *Choose Boring Technology* (2015)
 - Dan North — *Introducing BDD* (2006)
 - Michael Nygard — *Documenting Architecture Decisions* (2011)
 - Saltzer e Schroeder — *The Protection of Information in Computer Systems* (1975)
+- Smit et al. — *Should we be going MAD? A Look at Multi-Agent Debate Strategies for LLMs* (ICML 2024)
 - Snowden e Boone — *A Leader's Framework for Decision Making* (2007)
 - Joel Spolsky — *Painless Functional Specifications* (2000)
 - Sunshine et al. — *Crying Wolf* (USENIX Security, 2009)

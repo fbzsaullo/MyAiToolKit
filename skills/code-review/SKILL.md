@@ -1,7 +1,7 @@
 ---
 name: code-review
-description: Code review avulso e configurável, para código próprio ou de colegas — pergunta contra qual branch comparar (detecta main/master/develop e sugere), pergunta se o review está ligado a uma história (aceitando o XML/JSON do card, a descrição em texto, o número da issue ou nenhuma), monta um roteiro de review sob medida a partir do docs/sdd/config.yml e dos checklists da stack (qualidade + segurança), verifica a cobertura dos critérios de aceite da história e entrega um relatório em que cada apontamento tem severidade (Bloqueante/Importante/Sugestão) e quadrante de urgência × importância (Q1 a Q4), além de comentários prontos para colar no PR. Use quando o usuário pedir "code review", "revisar meu código", "revisar a branch/PR do fulano", "review antes de abrir o PR" ou chamar /code-review (no Claude Code, /my-ai-toolkit:code-review se houver conflito com o comando nativo). Para revisar uma tarefa T-XX do plano SDD, use sdd-review.
-argument-hint: "[branch, número do PR ou caminho de patch — opcional]"
+description: Code review avulso e configurável, para código próprio ou de colegas — pergunta contra qual branch comparar (detecta main/master/develop e sugere), pergunta se o review está ligado a uma história (aceitando o XML/JSON do card, a descrição em texto, o número da issue ou nenhuma), monta um roteiro de review sob medida a partir do docs/sdd/config.yml e dos checklists da stack (qualidade + segurança), verifica a cobertura dos critérios de aceite da história e entrega um relatório em que cada apontamento tem severidade (Bloqueante/Importante/Sugestão) e quadrante de urgência × importância (Q1 a Q4), além de comentários prontos para colar no PR. Com a revisão cruzada ligada (review.cross_check no config.yml, ou a palavra cruzada na chamada), um verificador independente confere os apontamentos graves antes do veredito. Use quando o usuário pedir "code review", "revisar meu código", "revisar a branch/PR do fulano", "review antes de abrir o PR" ou chamar /code-review (no Claude Code, /my-ai-toolkit:code-review se houver conflito com o comando nativo). Para revisar uma tarefa T-XX do plano SDD, use sdd-review.
+argument-hint: "[branch, número do PR ou caminho de patch — opcional; cruzada ou simples para a revisão cruzada]"
 allowed-tools: Read, Glob, Grep, Edit(docs/sdd/code-reviews/**)
 ---
 
@@ -93,6 +93,20 @@ Cada `CR-XX` recebe **duas** classificações (detalhes em `references/quadrants
 
 Os dois eixos são independentes: um lint quebrando o CI é `Sugestão` em impacto mas urgente (Q3); uma dívida de desenho real é `Importante` mas pode esperar (Q2).
 
+### Revisão cruzada (opcional)
+
+Decida se roda: palavra `cruzada` ou `simples` na entrada; senão, `review.cross_check` do `config.yml` (`never` quando ausente). Com `auto`, só roda se há pelo menos um `Bloqueante` ou um `Q1`.
+
+Rodando, siga `${CLAUDE_PLUGIN_ROOT}/templates/cross-check.md` **antes** de revisar o conjunto (`references/review-procedure.md`, seção 4):
+
+1. candidatos: `Bloqueante`, `Importante` e todo `Q1`, ainda sem número (`C-01`…), sem as ausências verificáveis por busca nem os alertas de ferramenta já confirmados;
+2. **uma** verificação por um agente novo, só de leitura (no Claude Code, `my-ai-toolkit:review-verifier`; no Codex, um subagente), com o pedido da seção 4 do modelo. Se o alvo não é a árvore de trabalho (branch de colega, PR, patch), mande também os arquivos citados **na versão do alvo**;
+3. o verificador julga se o problema acontece e a severidade; **o quadrante continua com você**;
+4. `Importante` fora do Q1 refutado com contra-evidência conferida sai para "Candidatos descartados"; `Bloqueante` ou `Q1` refutado fica **em disputa** e vai para o usuário numa pergunta só (manter no Q1 · mover para Q2 · descartar);
+5. numere o que ficou (`CR-01`…) e revise o conjunto.
+
+Sem como abrir um agente independente: registre `Revisão cruzada: indisponível neste ambiente` e siga. Nunca simule o verificador no mesmo contexto.
+
 ## Passo 7 — Relatório
 
 Use `references/cr-template.md` e salve em `docs/sdd/code-reviews/CR-<branch>-AAAA-MM-DD.md` (barras viram hífen; mesmo dia → `-2`, `-3`). Se o usuário preferir não versionar, entregue só na conversa.
@@ -109,6 +123,8 @@ O relatório traz:
 - `⛔ Não pronto para merge` — há Q1
 - `⚠️ Pronto com ajustes` — há Q3 (e/ou Q2 a registrar)
 - `✅ Pronto` — só Q4 ou nada
+
+Com revisão cruzada, o veredito sai do que ficou depois da verificação; disputa sem decisão conta como o apontamento original.
 
 Na conversa: veredito, a matriz de contagens, os itens de Q1 em destaque e o caminho do arquivo.
 
@@ -128,4 +144,5 @@ Na conversa: veredito, a matriz de contagens, os itens de Q1 em destaque e o cam
 - `references/quadrants.md` — critérios de severidade e de quadrante, com exemplos
 - `references/cr-template.md` — modelo do relatório
 - `${CLAUDE_PLUGIN_ROOT}/templates/card-ingestion.md` — leitura de cards
+- `${CLAUDE_PLUGIN_ROOT}/templates/cross-check.md` — revisão cruzada
 - `${CLAUDE_PLUGIN_ROOT}/stacks/rails/review-checklist.md` e `security-checklist.md` — checklists de referência

@@ -72,6 +72,34 @@ for dir in skills/*/; do
   done <<< "$frontmatter"
 done
 
+echo "== 1b. Agentes do plugin: frontmatter =="
+for file in agents/*.md; do
+  [ -e "$file" ] || continue
+  name="$(basename "$file" .md)"
+  if [ "$(head -n 1 "$file")" != "---" ]; then
+    fail "$file: frontmatter precisa comecar na primeira linha com ---"
+    continue
+  fi
+  frontmatter="$(awk 'NR == 1 { next } /^---$/ { exit } { print }' "$file")"
+  fm_name="$(printf '%s\n' "$frontmatter" | sed -n 's/^name:[[:space:]]*//p' | head -n 1)"
+  if [ "$fm_name" != "$name" ]; then
+    fail "$file: name '$fm_name' diferente do nome do arquivo '$name'"
+  fi
+  for key in description tools; do
+    if ! printf '%s\n' "$frontmatter" | grep -q "^$key:[[:space:]]*[^[:space:]]"; then
+      fail "$file: $key ausente ou vazio (agente do plugin precisa declarar as ferramentas)"
+    fi
+  done
+  while IFS= read -r line; do
+    key="${line%%:*}"
+    value="${line#*: }"
+    case "$value" in \"*|\'*) continue ;; esac
+    if printf '%s' "$value" | grep -q ': \| #'; then
+      fail "$file: valor de '$key' tem ': ' ou ' #' sem aspas (YAML invalido)"
+    fi
+  done <<< "$frontmatter"
+done
+
 echo "== 2. Referencias \${CLAUDE_PLUGIN_ROOT}/... =="
 while IFS= read -r file; do
   grep -o '\${CLAUDE_PLUGIN_ROOT}/[A-Za-z0-9_./<>*-]*' "$file" 2>/dev/null | sort -u | while IFS= read -r ref; do

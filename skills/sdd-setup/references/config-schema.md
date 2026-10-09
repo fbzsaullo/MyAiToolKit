@@ -81,6 +81,9 @@ code_review:
     - stacks/rails/review-checklist.md
     - stacks/rails/security-checklist.md
 
+review:
+  cross_check: never                 # never | auto | always — revisão cruzada no /sdd-review e no /code-review
+
 spike:
   hours_per_day: 6                   # horas produtivas por dia (ajuste do time)
   include_overheads: true            # somar review, QA e deploy à sugestão
@@ -119,12 +122,13 @@ permissions:
 | `commands.*` | não (`null` quando não existe) | `sdd-execute`, `code-review`, `sdd-review` |
 | `testing.ca_naming` | sim quando há testes | `sdd-execute`, `sdd-review`, `sdd-trace` |
 | `code_review.*` | sim | `code-review`, `sdd-review` |
+| `review.cross_check` | não (padrão `never`; perguntado no setup) | `sdd-review`, `code-review` |
 | `spike.*` | não (valores padrão abaixo) | `spike`, `sdd-plan` (estimativa) |
 | `sdd.docs_root` | não (padrão `docs/sdd`) | todas as skills do pipeline |
 | `git.commit.*` | sim (perguntado no setup) | `commit-message` e `sdd-review` (mensagem entregue em texto), `sdd-review` e `code-review` (aderência dos commits) |
 | `permissions.*` | não | `sdd-setup` |
 
-Padrões quando ausentes: `spike.hours_per_day: 6`, `spike.include_overheads: true`, `spike.overheads_pct: { code_review: 10, qa: 15, deploy: 5 }`, `sdd.docs_root: docs/sdd`, `project.language: pt-BR`. Sem `git.commit`, as skills usam `T-XX: <descrição>` e sugerem rodar o `/sdd-setup`.
+Padrões quando ausentes: `spike.hours_per_day: 6`, `spike.include_overheads: true`, `spike.overheads_pct: { code_review: 10, qa: 15, deploy: 5 }`, `sdd.docs_root: docs/sdd`, `project.language: pt-BR`, `review.cross_check: never`. Sem `git.commit`, as skills usam `T-XX: <descrição>` e sugerem rodar o `/sdd-setup`.
 
 ### `git.commit` — padrão das mensagens
 
@@ -137,6 +141,16 @@ O kit **nunca commita**: estas chaves só definem o formato da mensagem que as s
 | `custom` | o texto que o usuário escreveu, com os marcadores dele | `subject`, `footer` (`Refs: T-XX`) ou `none` | exemplo confirmado com o usuário |
 
 `types` só existe em `conventional`. Em `custom`, `example` é obrigatório: ele é a referência de quem lê o padrão.
+
+### `review.cross_check` — revisão cruzada
+
+| Valor | Efeito |
+| --- | --- |
+| `never` | Review como sempre foi (padrão) |
+| `auto` | Um verificador independente confere os apontamentos só quando o review achou um `Bloqueante` ou um `Q1` |
+| `always` | O verificador confere os `Bloqueante` e `Importante` de todo review |
+
+Os valores são palavras, e não `on`/`off`, porque em YAML 1.1 `on` e `off` são lidos como booleanos. Na chamada, `cruzada` e `simples` sobrepõem o valor. Regras em `templates/cross-check.md`.
 
 ## Monorepo
 

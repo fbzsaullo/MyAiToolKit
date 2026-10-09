@@ -17,6 +17,7 @@ Regras que mantêm as skills portáteis:
 2. **Argumentos:** o texto usa `$ARGUMENTS` com o aviso "se o seu ambiente não substituir essa variável, use a mensagem do usuário". O Claude Code substitui; os demais usam a mensagem.
 3. **Arquivos compartilhados** (`templates/`, `stacks/`, outros) são citados como `${CLAUDE_PLUGIN_ROOT}/<caminho>`. O Claude Code resolve a variável; os demais adaptadores **reescrevem** a variável para o caminho absoluto da instalação.
 4. **Nada de ferramenta exclusiva no fluxo principal.** Instruções falam em "leia o arquivo", "rode o comando (com confirmação)", não em nomes de ferramentas de uma IA específica.
+   **Exceção — recursos opcionais.** Um recurso desligado por padrão pode depender de uma capacidade do ambiente (a revisão cruzada precisa abrir um agente independente) desde que: (a) o texto descreva a capacidade e cite o jeito de cada IA entre parênteses; (b) o que o agente recebe esteja num arquivo compartilhado, igual para todas as IAs (`templates/cross-check.md`); (c) sem a capacidade, a skill avise e siga no modo normal — **nunca simule**.
 5. **Contexto do projeto em `AGENTS.md`.** O `sdd-setup` gera o `AGENTS.md` como fonte única; cada IA recebe um arquivo próprio só quando precisa (o `CLAUDE.md` apenas importa o `AGENTS.md`).
 
 ## Contrato de um adaptador
@@ -30,6 +31,7 @@ Para suportar uma IA nova, crie `adapters/<ia>/` com um `README.md` respondendo:
 | **Onde ficam os arquivos compartilhados?** | `.agents/myaitoolkit-shared/` |
 | **O que acontece com `${CLAUDE_PLUGIN_ROOT}`?** | o instalador troca pelo caminho absoluto da pasta compartilhada |
 | **Qual arquivo de contexto a IA lê?** | `AGENTS.md` (nativo) |
+| **Como a IA abre um agente independente?** (revisão cruzada) | subagente pedido pela skill, só de leitura; herda a sandbox da sessão |
 | **Como são as permissões?** | `.codex/config.toml` (perfil de sandbox) + `.codex/rules/*.rules` |
 | **Como instalar, atualizar e remover?** | `install.sh` / `install.ps1` com `--scope`, reexecução idempotente e `--uninstall` |
 

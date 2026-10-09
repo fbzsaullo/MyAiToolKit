@@ -15,7 +15,7 @@ Obrigado pelo interesse! O MyAiToolKit é um projeto de faculdade e open-source,
 1. **Uma pasta por skill** em `skills/<nome>/`, com `SKILL.md`. O `name` do frontmatter é igual ao nome da pasta.
 2. **`description` diz quando usar e quando não usar** — é por ela que as IAs escolhem a skill.
 3. **SKILL.md curta**, conduzindo o fluxo; modelos e catálogos vão em `references/`.
-4. **Portabilidade** (ver `adapters/README.md`): arquivos compartilhados como `${CLAUDE_PLUGIN_ROOT}/...`, `$ARGUMENTS` com o aviso de fallback, nada que dependa de ferramenta exclusiva de uma IA no fluxo principal.
+4. **Portabilidade** (ver `adapters/README.md`): arquivos compartilhados como `${CLAUDE_PLUGIN_ROOT}/...`, `$ARGUMENTS` com o aviso de fallback, nada que dependa de ferramenta exclusiva de uma IA no fluxo principal (recursos opcionais podem depender de uma capacidade do ambiente, nas condições de `adapters/README.md`, regra 4).
 5. **Português (PT-BR)** nos textos. Termos técnicos consagrados podem ficar em inglês.
 6. **Modelos dentro de cerca de quatro crases** (````` ````markdown `````) quando contiverem blocos de código — senão a primeira cerca interna fecha o modelo.
 7. **Nada inventado:** exemplos de comandos, versões e datas precisam de fonte ou devem apontar para a documentação oficial.
@@ -26,7 +26,7 @@ Obrigado pelo interesse! O MyAiToolKit é um projeto de faculdade e open-source,
 bash scripts/check.sh
 ```
 
-O script confere frontmatter das skills, caminhos `${CLAUDE_PLUGIN_ROOT}/...`, links relativos e cercas de modelos. O CI roda o mesmo script.
+O script confere frontmatter das skills e dos agentes do plugin (`agents/`), caminhos `${CLAUDE_PLUGIN_ROOT}/...`, links relativos e cercas de modelos. O CI roda o mesmo script.
 
 Teste a mudança de verdade:
 

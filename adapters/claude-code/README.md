@@ -50,6 +50,18 @@ As skills de fase (`sdd-architect`, `sdd-prd`, `sdd-prototype`, `sdd-plan`, `sdd
 - **`sdd-execute`** — escreve código e altera o plano;
 - **`sdd-setup`** — escreve `AGENTS.md`, `CLAUDE.md`, permissões e configuração.
 
+## Agentes do plugin
+
+A pasta `agents/` traz os subagentes que o plugin registra. Hoje há um:
+
+| Agente | Nome no Claude Code | Para quê |
+| --- | --- | --- |
+| `agents/review-verifier.md` | `my-ai-toolkit:review-verifier` | Verificador da revisão cruzada do `/sdd-review` e do `/code-review` (`templates/cross-check.md`) |
+
+Ele só tem `Read`, `Grep` e `Glob` (não edita, não roda comandos, não abre outros agentes), usa o mesmo modelo da sessão (`model: inherit`) e para em 12 passos (`maxTurns`). Só é chamado quando a revisão cruzada está ligada — `review.cross_check` no `config.yml` ou a palavra `cruzada` na chamada. Confira com `/agents` depois de instalar.
+
+Agentes de plugin ignoram `permissionMode`, `hooks` e `mcpServers` (documentação de subagentes do Claude Code); o verificador não precisa de nenhum deles.
+
 ## Permissões pré-aprovadas
 
 Cada skill declara `allowed-tools` com leitura (`Read`, `Glob`, `Grep`) e edição da pasta do artefato que ela produz (ex.: `Edit(docs/sdd/prds/**)` no `sdd-prd`). Comandos de shell **não** são pré-aprovados em nenhuma skill: rodar testes, git ou ferramentas pede confirmação, a menos que o `.claude/settings.json` do projeto (gerado pelo `sdd-setup`) os libere.

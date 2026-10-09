@@ -9,7 +9,7 @@
       "name": "my-ai-toolkit",
       "source": "./",
       "description": "Pipeline Spec-Driven Development, setup multilinguagem, /spike, /code-review, /commit-message, /pr-description e fluxos de mudança (/sdd-change, /sdd-bug, /sdd-adr) para agentes de IA.",
-      "version": "0.3.2",
+      "version": "0.4.0",
       "license": "MIT",
       "category": "workflow"
     }

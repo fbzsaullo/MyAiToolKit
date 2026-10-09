@@ -13,7 +13,8 @@ Preenchido pela skill `sdd-review`. Ordem das seções fixa. Arquivo: `docs/sdd/
 - **PRD:** `docs/sdd/prds/PRD-XXX-tema.md`
 - **ADRs considerados:** [ADR-XXX, ADR-YYY — ou "nenhum"]
 - **SPEC-UI:** [caminho — ou "não se aplica"]
-- **Revisor:** agente de IA (skill `sdd-review`)
+- **Revisor:** agente de IA (skill `sdd-review`)[ + verificador independente]
+- **Revisão cruzada:** [desligada / pulada (modo automático: sem Bloqueante) / feita — N verificados (C confirmados, D descartados, E em disputa, I inconclusivos) / incompleta — motivo / indisponível neste ambiente]
 - **Data:** AAAA-MM-DD
 - **Round:** [1 / 2 / 3]
 - **Recomendação:** [✅ Aprovado / ⚠️ Aprovado com ressalvas / ⛔ Bloqueado]
@@ -183,6 +184,27 @@ Melhorias opcionais, a critério de quem implementou.
 
 ---
 
+## Verificação cruzada — omitir se desligada, pulada ou indisponível
+
+Um verificador independente tentou derrubar cada apontamento grave, sem ver o raciocínio do revisor (`templates/cross-check.md`).
+
+| Apontamento | Severidade (antes → depois) | Verificador | Evidência do verificador | Decisão |
+| --- | --- | --- | --- | --- |
+| R-01 | Bloqueante → Bloqueante | Confirmado | `app/services/agendar_consulta.rb:31` — sem lock na leitura | mantido |
+| R-02 | Bloqueante → Bloqueante | Refutado | `app/controllers/application_controller.rb:6` — `before_action` | em disputa — decidido pelo usuário: manter |
+| R-03 | Importante → Sugestão | Confirmado (severidade menor) | `app/models/consulta.rb:12` — valor nunca chega nulo | rebaixado: o banco já impede o nulo |
+| R-04 | Importante → Importante | Inconclusivo | depende de configuração fora do repositório | mantido |
+
+### Candidatos descartados
+
+Refutados com contra-evidência conferida. Não receberam número.
+
+| Candidato | Severidade proposta | Contra-evidência |
+| --- | --- | --- |
+| Falta teste do horário de verão | Importante | `spec/services/agendar_consulta_spec.rb:88` cobre o caso |
+
+---
+
 ## Notas ao processo (não são apontamentos)
 
 - **Plano a ajustar:** [ex.: a T-04 entregou mais do que listava; sugerir extrair tarefa]
@@ -202,6 +224,8 @@ Comparado com `REVIEW-T-XX-AAAA-MM-DD.md`. A numeração recomeçou neste relat�
 | R-01 (round 1) — faltava teste do CA-05 | ✅ Resolvido | teste criado |
 | R-02 (round 1) — e-mail do paciente no log | ⚠️ Persiste | ver R-01 deste round |
 | R-03 (round 1) — número mágico | ✅ Resolvido | constante extraída |
+
+*Apontamento que esteve em disputa no round anterior: acrescente a decisão do usuário entre parênteses, ex.: "R-02 (round 1, em disputa — mantido pelo usuário)".*
 
 ---
 

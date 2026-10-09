@@ -68,7 +68,7 @@ Sem `config.yml`, sugira ferramentas pelo perfil da stack e pergunte se pode rod
 
 ## 4. Classificar
 
-Para cada `CR-XX`: severidade + quadrante, conforme `quadrants.md`. Revise o conjunto no final:
+Para cada apontamento: severidade + quadrante, conforme `quadrants.md`. Com a revisão cruzada ligada, ela roda aqui, entre a classificação e a revisão do conjunto (`templates/cross-check.md`): o verificador confere se cada problema acontece; a revisão do conjunto calibra a distribuição do que ficou. Revise o conjunto no final:
 - há Q1 demais? Reavalie — se tudo é urgente, nada é;
 - algum Bloqueante fora do Q1? Escreva o porquê;
 - todo Q2 tem sugestão de registro (card, tarefa, ADR)?
