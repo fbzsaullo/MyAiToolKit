@@ -2,6 +2,12 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.4] — 2026-10-09
+
+### Novo
+- **`PRIVACY.md`** (pt-BR, com resumo em inglês): o que o plugin lê, grava e envia — roda localmente, sem servidor, conector ou telemetria; grava só no repositório do usuário (o relatório do `/code-review` registra o nome do autor da branch ou do PR); não envia nada ao autor do kit nem a terceiros.
+- `privacyPolicyUrl` no `plugin.json` e seção "Privacidade" no README, apontando para o `PRIVACY.md`.
+
 ## [0.5.3] — 2026-10-09
 
 ### Novo

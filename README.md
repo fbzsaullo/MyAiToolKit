@@ -245,6 +245,12 @@ O detalhamento das fontes, inclusive da literatura de engenharia de software, es
 
 ---
 
+## Privacidade
+
+O plugin roda no seu ambiente, não tem servidor nem telemetria e não envia nada para o autor do kit nem para terceiros. O que ele lê e grava está em [PRIVACY.md](PRIVACY.md).
+
+---
+
 ## Licença
 
 [MIT](LICENSE). Inclui o aviso de copyright do leanwork-sdd, do qual o pipeline SDD deriva.
