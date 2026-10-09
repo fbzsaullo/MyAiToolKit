@@ -2,6 +2,11 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.2] — 2026-10-09
+
+### Corrigido
+- Descrição do plugin (`plugin.json`, a que aparece na listagem): a frase perdeu um "e" na 0.4.0 e ficou "…nem abre PR) fluxos de mudança —…". Agora: "…nem abre PR), fluxos de mudança (/sdd-change, /sdd-bug e /sdd-adr) e revisão cruzada…".
+
 ## [0.5.1] — 2026-10-09
 
 Preparação para o diretório de plugins do Claude.
