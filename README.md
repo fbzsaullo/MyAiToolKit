@@ -6,6 +6,8 @@
 >
 > O pipeline SDD tem como base o [leanwork-sdd](https://github.com/leanwork/leanwork-sdd) (MIT) — veja [Origem e créditos](#origem-e-créditos).
 
+**🌐 Site:** [myaitoolkit.fbz.dev](https://myaitoolkit.fbz.dev/) · [English](https://myaitoolkit.fbz.dev/en/) — o kit numa página: pipeline, comandos, rastreabilidade e instalação. O site foi feito com o próprio kit, e os PRDs, planos, reviews e matrizes dele estão em [MyAiToolKit-Site/docs/sdd](https://github.com/fbzsaullo/MyAiToolKit-Site/tree/main/docs/sdd).
+
 O kit reúne três frentes:
 
 1. **Pipeline SDD (Spec-Driven Development)** — da arquitetura ao review, com cada artefato ligado ao anterior por IDs rastreáveis.

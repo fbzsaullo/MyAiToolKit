@@ -2,6 +2,11 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [Não lançado]
+
+### Documentação
+- README: links do site ([myaitoolkit.fbz.dev](https://myaitoolkit.fbz.dev/), versão em inglês) e dos artefatos SDD do site, feitos com o próprio kit.
+
 ## [0.5.4] — 2026-10-09
 
 ### Novo
