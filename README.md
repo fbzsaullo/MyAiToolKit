@@ -190,7 +190,7 @@ O conteúdo é escrito uma vez, no formato portátil de skills, e cada IA recebe
 
 ```
 MyAiToolKit/
-├── .claude-plugin/        manifesto do plugin e do marketplace (Claude Code)
+├── .claude-plugin/        manifesto do plugin e do marketplace, ícone da listagem (Claude Code)
 ├── skills/                uma pasta por comando (SKILL.md + references/)
 │   ├── sdd-start/ sdd-next/ sdd-trace/ sdd-execute/
 │   ├── sdd-architect/ sdd-prd/ sdd-prototype/ sdd-plan/ sdd-review/

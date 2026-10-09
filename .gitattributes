@@ -3,3 +3,6 @@
 
 # PowerShell lida bem com LF, mas o Windows PowerShell 5.1 prefere CRLF.
 *.ps1 text eol=crlf
+
+# Imagens são binárias: nunca converter finais de linha.
+*.png binary

@@ -2,6 +2,17 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.1] — 2026-10-09
+
+Preparação para o diretório de plugins do Claude.
+
+### Novo
+- **Ícone da listagem** na pasta `.claude-plugin/`: o ícone MA/TK da marca, em PNG quadrado de 1024 px, branco sobre preto. O Claude Code não lê o arquivo; só o diretório usa.
+
+### Convenções
+- `.gitattributes`: imagens PNG marcadas como binárias, fora da regra de finais de linha LF.
+- Conferido o que o validador do diretório apontou como leitura de credencial da máquina e como execução de pacote baixado: são exemplos de regras de permissão (`deny` de `.env`, `config/master.key`, `.aws/credentials`; `ask` de `npx` e `pnpm dlx`) que o `/sdd-setup` grava para **bloquear** ou **perguntar**. Nenhuma skill lê segredo nem roda script remoto; nada mudou nesses arquivos.
+
 ## [0.5.0] — 2026-10-09
 
 O "Resolvido" do round 2 passa a ser conferido.
