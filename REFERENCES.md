@@ -145,7 +145,8 @@ A cadeia `ADR → RN → CA → UI → T → R → teste` é uma **matriz de ras
 - **Os limites do debate** — Smit et al., *Should we be going MAD? A Look at Multi-Agent Debate Strategies for LLMs* (ICML 2024): o debate não supera de forma consistente amostragem com voto e custa mais. *Debate or Vote* (NeurIPS 2025, arXiv 2508.17536): o voto explica a maior parte do ganho; o debate sozinho não melhora a resposta esperada. Huang et al., *Large Language Models Cannot Self-Correct Reasoning Yet* (ICLR 2024): autocorreção sem informação nova não ajuda.
 - **Verificação independente** — Dhuliawala et al., *Chain-of-Verification Reduces Hallucination in Large Language Models* (2023): responder às verificações sem ver o rascunho evita que ele contamine a checagem. É a base do "o verificador não recebe o raciocínio de quem apontou".
 - **Encontrar e verificar, na prática** — o [Code Review da Anthropic](https://claude.com/blog/code-review) (2026: buscadores em paralelo e uma etapa de verificação contra o comportamento real do código), o plugin [`code-review` do Claude Code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/README.md) (uma nota por apontamento e corte por confiança) e o [uReview da Uber](https://www.uber.com/en-US/blog/ureview/) (gerador e avaliador separados). Os números de precisão dessas fontes são do próprio fornecedor e medidos de formas diferentes.
-- **Adaptação:** uma única verificação por review, sem réplica, e regra assimétrica — `Importante` refutado com contra-evidência sai; `Bloqueante`/`Q1` refutado vai para o usuário. O limite de 20 candidatos, os 12 passos do verificador e a faixa de custo de 1,5–2× são **heurísticas de prática**.
+- **Adaptação:** uma única verificação por review, sem réplica, e regra assimétrica — `Importante` refutado com contra-evidência sai; `Bloqueante`/`Q1` refutado vai para o usuário. O limite de 20 itens, os 12 passos do verificador e a faixa de custo de 1,5–2× são **heurísticas de prática**.
+- **Conferência das correções** (round 2 em diante) — **adaptação** da mesma verificação independente ao momento em que o erro mais caro é o oposto: dar como fechado o que continua aberto. A assimetria se inverte (reabrir é o lado conservador), e a regra de que um teste com `CA-XX` no nome não prova o cenário retoma "Busca textual não prova execução", em "Escolhas que divergem da literatura".
 
 ---
 
@@ -248,7 +249,8 @@ Partes desenhadas para este projeto, além da base herdada do [leanwork-sdd](#le
 | **RTO / RPO** | Recuperação de desastre citada sem as métricas que a definem |
 | **eMAG e LBI (Lei 13.146/2015)** | Acessibilidade cita WCAG, não a norma brasileira |
 | **Calibração de estimativas com histórico** | O `spike` poderia comparar estimativa informada × tempo real das tarefas concluídas |
-| **Revisão cruzada sem medição** | Registrar quantos apontamentos o verificador confirma, descarta e deixa em disputa, para calibrar o modo `auto` com dados do próprio projeto |
+| **Revisão cruzada sem medição** | Registrar quantos apontamentos o verificador confirma, descarta, deixa em disputa e reabre, para calibrar o modo `auto` com dados do próprio projeto |
+| **Rounds no `code-review`** | Ligar um relatório `CR-…` ao anterior da mesma branch, para conferir correções também fora do pipeline SDD |
 | **Perfis completos para outras stacks** | Hoje só Rails tem checklists, heurísticas e exemplos próprios |
 
 ---

@@ -14,8 +14,9 @@ Preenchido pela skill `sdd-review`. Ordem das seções fixa. Arquivo: `docs/sdd/
 - **ADRs considerados:** [ADR-XXX, ADR-YYY — ou "nenhum"]
 - **SPEC-UI:** [caminho — ou "não se aplica"]
 - **Revisor:** agente de IA (skill `sdd-review`)[ + verificador independente]
-- **Revisão cruzada:** [desligada / pulada (modo automático: sem Bloqueante) / feita — N verificados (C confirmados, D descartados, E em disputa, I inconclusivos) / incompleta — motivo / indisponível neste ambiente]
+- **Revisão cruzada:** [desligada / pulada (modo automático: sem Bloqueante nem correção de Bloqueante a conferir) / feita — N verificados (C confirmados, D descartados, E em disputa, I inconclusivos)[ · M correções conferidas (A resolvidas, B reabertas, C em disputa)] / incompleta — motivo / indisponível neste ambiente]
 - **Data:** AAAA-MM-DD
+- **Commit revisado:** [hash curto do código revisado — ou "não se aplica" para patch avulso]
 - **Round:** [1 / 2 / 3]
 - **Recomendação:** [✅ Aprovado / ⚠️ Aprovado com ressalvas / ⛔ Bloqueado]
 
@@ -217,13 +218,16 @@ Refutados com contra-evidência conferida. Não receberam número.
 
 ## Round anterior (a partir do round 2)
 
-Comparado com `REVIEW-T-XX-AAAA-MM-DD.md`. A numeração recomeçou neste relatório: os `R-XX` da tabela são do round anterior.
+Comparado com `REVIEW-T-XX-AAAA-MM-DD.md` (commit revisado `a1b2c3d` → agora `e4f5a6b`). A numeração recomeçou neste relatório: os `R-XX` da tabela são do round anterior.
 
-| Apontamento anterior | Situação | Comentário |
-| --- | --- | --- |
-| R-01 (round 1) — faltava teste do CA-05 | ✅ Resolvido | teste criado |
-| R-02 (round 1) — e-mail do paciente no log | ⚠️ Persiste | ver R-01 deste round |
-| R-03 (round 1) — número mágico | ✅ Resolvido | constante extraída |
+| Apontamento anterior | Situação | Verificador | Comentário |
+| --- | --- | --- | --- |
+| R-01 (round 1, Bloqueante) — SQL com parâmetro interpolado | ⚠️ Persiste (reaberto pelo verificador) | Persiste — `app/models/pedido.rb:12` ainda interpola `params[:ordem]` | ver R-01 deste round |
+| R-02 (round 1, Importante) — faltava teste do CA-05 | ✅ Resolvido | Resolvido — `spec/requests/consultas_spec.rb:40` exercita o cenário inteiro | — |
+| R-03 (round 1, Importante) — e-mail do paciente no log | ⚠️ Persiste | — (marcado Persiste: não vai ao verificador) | ver R-02 deste round |
+| R-04 (round 1, Sugestão) — número mágico | ✅ Resolvido | — (Sugestão: não é conferida) | constante extraída |
+
+*Coluna Verificador: só com revisão cruzada; nas demais situações, escreva o motivo de não haver conferência entre parênteses. Correção de Bloqueante com resposta `Inconclusivo` aparece como "em disputa — decidido pelo usuário: …".*
 
 *Apontamento que esteve em disputa no round anterior: acrescente a decisão do usuário entre parênteses, ex.: "R-02 (round 1, em disputa — mantido pelo usuário)".*
 

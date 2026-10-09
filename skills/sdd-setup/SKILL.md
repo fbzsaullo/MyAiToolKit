@@ -86,8 +86,8 @@ Ofereça três opções e a resposta livre:
 | Opção | Valor gravado | Efeito |
 | --- | --- | --- |
 | **Desligada** (recomendada) | `never` | Review como sempre foi |
-| **Automática** | `auto` | Verifica só quando o review achou um `Bloqueante` ou um `Q1` |
-| **Sempre** | `always` | Verifica os `Bloqueante` e `Importante` de todo review |
+| **Automática** | `auto` | Verifica só quando o review achou um `Bloqueante` ou um `Q1`; do round 2 em diante, também confere se os `Bloqueantes` marcados como resolvidos foram mesmo resolvidos |
+| **Sempre** | `always` | Verifica os `Bloqueante` e `Importante` de todo review e, do round 2 em diante, confere as correções de ambos |
 | **Outro** | — | O usuário descreve; converta para um dos três valores e confirme antes de gravar |
 
 - **Diga o custo na própria pergunta:** um review com verificação gasta cerca de 1,5 a 2 vezes os tokens de um review simples.

@@ -2,6 +2,20 @@
 
 Todas as mudanças relevantes do MyAiToolKit. Formato inspirado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/); versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.5.0] — 2026-10-09
+
+O "Resolvido" do round 2 passa a ser conferido.
+
+### Novo
+- **Conferência das correções** no `/sdd-review`, do round 2 em diante, com a revisão cruzada ligada: os apontamentos do round anterior que o revisor marcou `Resolvido` vão para o mesmo verificador independente, sem a marcação nem o motivo dela, junto com o diff desde o round anterior. Ele responde `Resolvido`, `Persiste` ou `Inconclusivo`, sempre com `arquivo:linha`.
+- **Assimetria invertida:** `Persiste` com evidência conferida **reabre** o apontamento como `R-XX` do round, com a severidade original; `Inconclusivo` numa correção de `Bloqueante` vira disputa e vai para o usuário (sem resposta, reabre).
+- **Teste que não prova o cenário:** se o apontamento era a falta de um teste, o verificador confere se o teste novo exercita o cenário — existir com `CA-XX` no nome não basta.
+- `auto` confere as correções de `Bloqueantes` (e isso, sozinho, aciona a verificação); `always` confere as de `Bloqueantes` e `Importantes`. Tudo no mesmo pedido único: parte A (candidatos novos) e parte B (correções), com limite de 20 itens.
+- Relatório com o campo **`Commit revisado:`** — o próximo round usa o diff desde ele — e a coluna **Verificador** na tabela "Round anterior".
+
+### Convenções
+- `templates/cross-check.md`: seção 7 nova (correções); as travas viram a seção 8, com a trava 6 reescrita ("o que foi julgado não é julgado de novo; confere-se só a correção") e a trava 7 nova (reaberto espera o próximo round).
+
 ## [0.4.0] — 2026-10-09
 
 Os reviews podem se questionar — sem virar debate.

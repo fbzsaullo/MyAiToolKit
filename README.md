@@ -145,13 +145,15 @@ Com `review.cross_check` ligado no `config.yml` (ou a palavra `cruzada` na chama
 - **Refutado com evidência** (`arquivo:linha`): um `Importante` sai do relatório e vai para "Candidatos descartados"; um `Bloqueante` ou `Q1` **nunca sai sozinho** — vira uma pergunta para você.
 - **Inconclusivo:** fica como está.
 
+Do round 2 em diante, o `/sdd-review` também **confere as correções**: o que foi marcado como `Resolvido` vai para o verificador, que diz se o problema ainda acontece. `Persiste` com evidência reabre o apontamento no round atual; uma correção de Bloqueante que ele não consegue confirmar vira pergunta para você. Se o problema era a falta de um teste, o teste precisa provar o cenário — existir com o nome certo não basta.
+
 Não é um debate: os agentes não conversam entre si, há uma única verificação por review, sem réplica, e o verificador só lê. A pesquisa sobre agentes que discutem entre si mostra que rodadas livres raramente superam um agente bem orientado; o que melhora a precisão é verificar cada apontamento de forma independente ([REFERENCES.md](REFERENCES.md)).
 
 | `review.cross_check` | Quando verifica | Custo |
 | --- | --- | --- |
 | `never` (padrão) | nunca | — |
-| `auto` | só quando há `Bloqueante` ou `Q1` | ~1,5–2× nos reviews verificados |
-| `always` | todo review | ~1,5–2× |
+| `auto` | só quando há `Bloqueante` ou `Q1` — e, no round 2 em diante, quando um `Bloqueante` foi marcado como resolvido | ~1,5–2× nos reviews verificados |
+| `always` | todo review, conferindo também as correções de `Bloqueantes` e `Importantes` | ~1,5–2× |
 
 No Claude Code o verificador é o agente do plugin `review-verifier`; no Codex, um subagente. Sem suporte a subagentes, o review avisa e segue simples. Regras em [`templates/cross-check.md`](templates/cross-check.md).
 

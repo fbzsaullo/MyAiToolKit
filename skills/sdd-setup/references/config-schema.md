@@ -147,8 +147,8 @@ O kit **nunca commita**: estas chaves só definem o formato da mensagem que as s
 | Valor | Efeito |
 | --- | --- |
 | `never` | Review como sempre foi (padrão) |
-| `auto` | Um verificador independente confere os apontamentos só quando o review achou um `Bloqueante` ou um `Q1` |
-| `always` | O verificador confere os `Bloqueante` e `Importante` de todo review |
+| `auto` | Um verificador independente confere os apontamentos só quando o review achou um `Bloqueante` ou um `Q1`; no `sdd-review`, do round 2 em diante, também confere as correções de `Bloqueantes` marcadas `Resolvido` |
+| `always` | O verificador confere os `Bloqueante` e `Importante` de todo review e, do round 2 em diante, as correções de ambos |
 
 Os valores são palavras, e não `on`/`off`, porque em YAML 1.1 `on` e `off` são lidos como booleanos. Na chamada, `cruzada` e `simples` sobrepõem o valor. Regras em `templates/cross-check.md`.
 

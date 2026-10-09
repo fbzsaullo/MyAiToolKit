@@ -1,6 +1,6 @@
 ---
 name: sdd-review
-description: Revisa a implementação de uma tarefa T-XX do plano SDD comparando o código com o plano, o PRD, os ADRs e a SPEC-UI, e gera o relatório REVIEW-T-XX com apontamentos R-XX classificados em Bloqueante, Importante ou Sugestão. Avalia aderência ao plano, rastreabilidade, aderência à especificação, testes, qualidade do código, segurança (com checklist por stack) e, quando há SPEC-UI, conformidade de interface. Um apontamento Bloqueante devolve a tarefa como Bloqueado no plano. Use quando o usuário pedir "review da T-XX", "revisar a tarefa", "validar a implementação contra o plano", "fechar a T-XX" ou trouxer um diff dizendo qual tarefa ele entrega. Fase 6 do pipeline SDD do MyAiToolKit. Quando aprova, entrega a mensagem de commit pronta no padrão do projeto (o kit nunca commita) e preenche no histórico do plano o hash dos commits já feitos. Com a revisão cruzada ligada (review.cross_check no config.yml, ou a palavra cruzada na chamada), um verificador independente confere os apontamentos graves antes do veredito. Para review avulso, sem plano SDD (código próprio ou de colegas, ligado ou não a um card), use a skill code-review.
+description: Revisa a implementação de uma tarefa T-XX do plano SDD comparando o código com o plano, o PRD, os ADRs e a SPEC-UI, e gera o relatório REVIEW-T-XX com apontamentos R-XX classificados em Bloqueante, Importante ou Sugestão. Avalia aderência ao plano, rastreabilidade, aderência à especificação, testes, qualidade do código, segurança (com checklist por stack) e, quando há SPEC-UI, conformidade de interface. Um apontamento Bloqueante devolve a tarefa como Bloqueado no plano. Use quando o usuário pedir "review da T-XX", "revisar a tarefa", "validar a implementação contra o plano", "fechar a T-XX" ou trouxer um diff dizendo qual tarefa ele entrega. Fase 6 do pipeline SDD do MyAiToolKit. Quando aprova, entrega a mensagem de commit pronta no padrão do projeto (o kit nunca commita) e preenche no histórico do plano o hash dos commits já feitos. Com a revisão cruzada ligada (review.cross_check no config.yml, ou a palavra cruzada na chamada), um verificador independente confere os apontamentos graves antes do veredito e, do round 2 em diante, se o que foi marcado como resolvido está mesmo resolvido. Para review avulso, sem plano SDD (código próprio ou de colegas, ligado ou não a um card), use a skill code-review.
 argument-hint: "[T-XX e/ou branch, PR ou caminho do diff — opcional; cruzada ou simples para a revisão cruzada]"
 allowed-tools: Read, Glob, Grep, Edit(docs/sdd/reviews/**), Edit(docs/sdd/plans/**)
 ---
@@ -39,6 +39,8 @@ Um PR que entrega várias tarefas gera **um relatório por tarefa**, mais um res
 4. nada disso: pergunte como acessar o código (colar o diff, caminho, branch para comparar).
 
 Diff vazio ou inacessível: não gere relatório.
+
+**Commit revisado.** Anote o hash curto do código que está sendo revisado (`git rev-parse --short HEAD`, ou o último commit da branch ou do PR; patch avulso: `não se aplica`). Ele vai para o cabeçalho do relatório e permite ao próximo round ver só o que mudou desde este.
 
 ## Passo 2 — Artefatos
 
@@ -82,17 +84,18 @@ Ferramentas da stack (linters, análise de segurança, testes) podem ser rodadas
 
 ## Passo 4b — Revisão cruzada (opcional)
 
-Decida se roda: palavra `cruzada` ou `simples` na entrada; senão, `review.cross_check` do `docs/sdd/config.yml` (`never` quando ausente). Com `auto`, só roda se a avaliação produziu pelo menos um `Bloqueante`.
+Decida se roda: palavra `cruzada` ou `simples` na entrada; senão, `review.cross_check` do `docs/sdd/config.yml` (`never` quando ausente). Com `auto`, só roda se a avaliação produziu pelo menos um `Bloqueante` — ou, do round 2 em diante, se algum `Bloqueante` do round anterior foi marcado `Resolvido`.
 
 Rodando, siga `${CLAUDE_PLUGIN_ROOT}/templates/cross-check.md`:
 
-1. separe os candidatos (`Bloqueante` e `Importante`, sem as ausências verificáveis por busca nem os alertas de ferramenta já confirmados), ainda sem número — `C-01`, `C-02`…;
-2. delegue **uma** verificação a um agente novo, só de leitura (no Claude Code, o agente `my-ai-toolkit:review-verifier`; no Codex, um subagente), com o pedido da seção 4 do modelo — sem o seu raciocínio nem o caminho sugerido;
-3. aplique as respostas pela tabela da seção 5: `Importante` refutado com contra-evidência conferida sai para "Candidatos descartados"; `Bloqueante` refutado, ou com sugestão de severidade menor, fica **em disputa**;
-4. leve as disputas ao usuário numa pergunta só (seção 6) — a resposta "manter" já vale como a confirmação do Passo 6;
-5. numere o que ficou (`R-01`…) e siga para o relatório.
+1. separe os candidatos novos (`Bloqueante` e `Importante`, sem as ausências verificáveis por busca nem os alertas de ferramenta já confirmados), ainda sem número — `C-01`, `C-02`…;
+2. do round 2 em diante, separe também as **correções a conferir** (seção 7 do modelo): os `Bloqueantes` do round anterior que você marcou `Resolvido` — e, em `always` ou `cruzada`, os `Importantes` — como `P-01`, `P-02`…, inclusive os que eram falta de teste;
+3. delegue **uma** verificação a um agente novo, só de leitura (no Claude Code, o agente `my-ai-toolkit:review-verifier`; no Codex, um subagente), com o pedido da seção 4 do modelo — sem o seu raciocínio, o caminho sugerido ou a sua marcação `Resolvido`;
+4. aplique as respostas: candidatos pela seção 5 (`Importante` refutado com contra-evidência conferida sai para "Candidatos descartados"; `Bloqueante` refutado, ou com sugestão de severidade menor, fica **em disputa**); correções pela seção 7 (`Persiste` com evidência conferida **reabre** o apontamento como `R-XX` deste round; `Inconclusivo` numa correção de `Bloqueante` fica **em disputa**);
+5. leve as disputas ao usuário numa pergunta só (seção 6) — as respostas que bloqueiam ("manter", "reabrir") já valem como a confirmação do Passo 6;
+6. numere o que ficou (`R-01`…), com os reabertos, e siga para o relatório.
 
-Sem como abrir um agente independente: registre `Revisão cruzada: indisponível neste ambiente` e siga. Nunca faça a verificação no mesmo contexto fingindo ser outro agente. Não há segunda verificação nem réplica: as travas estão na seção 7 do modelo.
+Sem como abrir um agente independente: registre `Revisão cruzada: indisponível neste ambiente` e siga. Nunca faça a verificação no mesmo contexto fingindo ser outro agente. Não há segunda verificação nem réplica: as travas estão na seção 8 do modelo.
 
 ## Passo 5 — Relatório
 
@@ -114,7 +117,7 @@ O plano só "sabe" do review se ele for escrito lá. Com **pelo menos um Bloquea
 1. mude o `**Status:**` da `T-XX` para `Bloqueado`;
 2. acrescente no histórico do plano a referência, ex.: `Bloqueado por R-01, R-03 (REVIEW-T-04-2026-10-09)`.
 
-Peça confirmação antes de editar o plano (se o Bloqueante esteve em disputa, a resposta do Passo 4b já é essa confirmação), e avise se a tarefa estava `Concluído` — é exatamente a contradição entre estado declarado e estado verificado que o `sdd-trace` trata como grave.
+Peça confirmação antes de editar o plano (se o Bloqueante esteve em disputa ou foi uma correção em disputa, a resposta do Passo 4b já é essa confirmação; um apontamento reaberto pelo verificador entra como qualquer Bloqueante do round), e avise se a tarefa estava `Concluído` — é exatamente a contradição entre estado declarado e estado verificado que o `sdd-trace` trata como grave.
 
 Sem Bloqueante, **não mexa no estado da tarefa**. `Aprovado com ressalvas` não muda o status; Importantes que justificarem viram tarefa nova via `sdd-plan`. A única edição permitida no plano, nesse caso, é a coluna Commit do histórico (Passo 7).
 
@@ -148,7 +151,8 @@ Mostre as mudanças propostas na coluna e peça confirmação antes de editar o 
 3. Salve como `REVIEW-T-XX-AAAA-MM-DD-roundN.md`. O relatório anterior não é editado — a sequência deles é o histórico de qualidade da tarefa.
 4. Os apontamentos novos recomeçam em `R-01`. Fora do relatório, sempre qualificados: `R-01 (REVIEW-T-04-2026-10-09)`.
 5. O Passo 7 vale em todo round: a mensagem de commit sai no round que aprovar.
-6. Com revisão cruzada, só os candidatos novos do round são verificados. Na tabela "Round anterior", apontamento que esteve em disputa leva a decisão do usuário entre parênteses; candidatos descartados não são acompanhados.
+6. Com revisão cruzada, o que já foi julgado não é julgado de novo: os candidatos novos do round são verificados, e dos apontamentos antigos confere-se só a **correção** — os marcados `Resolvido` vão para o verificador (Passo 4b). A tabela "Round anterior" ganha a coluna Verificador; apontamento que esteve em disputa leva a decisão do usuário entre parênteses; candidatos descartados não são acompanhados.
+7. Leia o `Commit revisado` do relatório anterior: o diff desde ele é o que o verificador recebe para cada correção. Relatório anterior sem esse campo (anterior à 0.5.0): use o diff inteiro contra a base e avise que as linhas podem ter mudado.
 
 ## Não é papel deste review
 
